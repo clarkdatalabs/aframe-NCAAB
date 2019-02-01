@@ -1,3 +1,4 @@
 
 *.pyc
-venv/
+python/venv/
+python/venv/lib/python3.7/__pycache__/hashlib.cpython-37.pyc
