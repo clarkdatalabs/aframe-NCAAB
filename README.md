@@ -6,6 +6,7 @@
 
 # Possible Libraries
 [Sample Dex Scatter Plot](https://bl.ocks.org/PatMartin/e0e3a3302f96ce7073eb0dd1df8a4512)
+
 [Sample Elegans Scatter Plot](https://elegans.readthedocs.io/en/latest/supporting_charts.html#scatter)
 
 
