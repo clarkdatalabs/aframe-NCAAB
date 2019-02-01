@@ -12,7 +12,7 @@
 
 ## Project Layout
     ├── python                    # Folder for data generation script and data in csvs
-    ├── dex                       # Folder for dexJS 
+    ├── javascript                # Folder for dexJS 
     ├── LICENSE              
     └── README.md
 
@@ -42,4 +42,10 @@ pip install -e git+https://github.com/SohierDane/BigQuery_Helper#egg=bq_helper
 Enable Google authenticaiton
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=./secrets/Data\ Visualization-0a64d281dd18.json
+```
+
+### Javascript 
+Run the following in the javascript folder to start your own server
+```
+python -m SimpleHTTPServer
 ```
