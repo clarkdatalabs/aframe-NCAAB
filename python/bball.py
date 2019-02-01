@@ -18,7 +18,7 @@ tables = ncaa_basketball.list_tables()
 
 
 for x in tables:
-    df = ncaa_basketball.head(x,1000)
+    df = ncaa_basketball.head(x,5000)
     df.to_csv(r'generated_data/'+str(x)+'.csv')
     print('Generated '+ str(x))
 
