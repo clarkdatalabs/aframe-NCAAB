@@ -36,7 +36,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/hopetambala/Documents/development/work/libviz/threeJS-NCAAB/python/venv"
+set -gx VIRTUAL_ENV "/Users/hopetambala/Documents/development/work/libviz/dexJS-NCAAB/python/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

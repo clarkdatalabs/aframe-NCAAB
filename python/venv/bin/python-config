@@ -1,4 +1,4 @@
-#!/Users/hopetambala/Documents/development/work/libviz/threeJS-NCAAB/python/venv/bin/python
+#!/Users/hopetambala/Documents/development/work/libviz/dexJS-NCAAB/python/venv/bin/python
 
 import sys
 import getopt
