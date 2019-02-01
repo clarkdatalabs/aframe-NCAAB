@@ -1,13 +1,18 @@
-# threeJS-NCAAB
+# dexJS-NCAAB
 
 
 # Resources 
-[Sample ThreeJS Scatter Plot](http://bl.ocks.org/phil-pedruco/9852362)
 [NCAAB Data Set](https://www.kaggle.com/ncaa/ncaa-basketball)
+
+# Possible Libraries
+[Sample Dex Scatter Plot](https://bl.ocks.org/PatMartin/e0e3a3302f96ce7073eb0dd1df8a4512)
+[Sample Elegans Scatter Plot](https://elegans.readthedocs.io/en/latest/supporting_charts.html#scatter)
+
 
 
 ## Project Layout
     ├── python                    # Folder for data generation script and data in csvs
+    ├── dex                       # Folder for dexJS 
     ├── LICENSE              
     └── README.md
 
