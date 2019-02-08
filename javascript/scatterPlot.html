@@ -2,12 +2,8 @@
 <meta charset="utf-8">
 <style>
     html, body, #ScatterPlotParent {
-        /*
-        height: 100%;
-        min-height: 100%;
-        width: 100%;
-        min-width: 100%;*/
     }
+    
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.theme.min.css">
@@ -36,8 +32,7 @@
       rows: 100, columns: 6, min: 0, max: 1000
     })); */
     
-    d3.csv("teams_clean.csv", function(data){
-      //console.log(data)
+    d3.csv("teams_games_all.csv", function(data){
       var csv = new dex.csv(data)
       //for(var i=0;i<data.length;i++){
       //  console.log(data[i].season)
