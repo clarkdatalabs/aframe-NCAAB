@@ -1,13 +1,16 @@
-# dexJS-NCAAB
+# A-Frame and NCAA Men's Basketball
 
 
 # Resources 
 [NCAAB Data Set](https://www.kaggle.com/ncaa/ncaa-basketball)
 
-# Possible Libraries
-[Sample Dex Scatter Plot](https://bl.ocks.org/PatMartin/e0e3a3302f96ce7073eb0dd1df8a4512)
+# Libraries
+[Pandas](https://pandas.pydata.org/)
 
-[Sample Elegans Scatter Plot](https://elegans.readthedocs.io/en/latest/supporting_charts.html#scatter)
+[Google BigQuery](https://cloud.google.com/bigquery/docs/reference/libraries)
+
+[A-Frame] (https://aframe.io/)
+
 
 
 
