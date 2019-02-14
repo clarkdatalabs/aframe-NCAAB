@@ -16,11 +16,26 @@ tables = ncaa_basketball.list_tables()
 # mbb_teams_games_sr
 
 # Query of All Data from Teams Games
-query = """SELECT * 
+old_query = """SELECT * 
             FROM `bigquery-public-data.ncaa_basketball.mbb_teams_games_sr`"""
 
+query = """
+SELECT 
+    season,
+    market, 
+    name, 
+    alias, 
+    current_division, 
+    wins, 
+    losses,
+    ties,
+    (wins / losses) AS pct
+FROM `bigquery-public-data.ncaa_basketball.mbb_historical_teams_seasons`
+WHERE 2013 = season;
+"""
+
 df = ncaa_basketball.query_to_pandas_safe(query, max_gb_scanned=1)
-df.to_csv(r'generated_data/'+'teams_games_all'+'.csv')
+df.to_csv(r'generated_data/'+'2013_season'+'.csv')
 
 
 # Print 10000 Records of Each Table
