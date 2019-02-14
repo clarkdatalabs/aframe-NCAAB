@@ -9,7 +9,7 @@
 
 [Google BigQuery](https://cloud.google.com/bigquery/docs/reference/libraries)
 
-[A-Frame] (https://aframe.io/)
+[A-Frame](https://aframe.io/)
 
 
 
