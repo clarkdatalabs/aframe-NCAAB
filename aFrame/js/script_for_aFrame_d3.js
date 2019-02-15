@@ -15,16 +15,16 @@
           maxR = 10;
 
 //parameters that need csv
-    const maxPoint = 128,
-          minPoint = 42;
+    const maxPoint = 200,
+          minPoint = 20;
 
 
-    const y_scale = d3.scale.ordinal()
+    const y_scale = d3.scaleOrdinal()
                             .domain([64, 32, 16, 8, 4, 2, 1])
                             .range([-30, -20, -10, 0, 10, 20, 30]);
 
-    const r_scale = d3.scale.linear()
-                            .domain([minScore, maxScore])
+    const r_scale = d3.scaleLinear()
+                            .domain([minPoint, maxPoint])
                             .range([maxR, 0]);
 
     const teamPlace = (teamIndex, score, round) => {
@@ -37,7 +37,7 @@
     };
 
 
-    d3.csv('.csv', function(error, data){
+    d3.csv('2013_season_clean.csv').then(function(data){
         // create the spheres as teams
             aEntity.selectAll('.team')
                     .data(data)
@@ -45,8 +45,8 @@
                     .append('a-sphere')
                         .classed('team', true)
                         .attr('color', 'blue') // here the color can be changed based on leage or something (maybe another scale is needed)
-                        .attr('scale', '0.1 0.1 0.1') // the scale can be changed based on seed like `${0.1 * d.seed} ${0.1 * d.seed} ${0.1 * d.seed}`
-                        .attr('position', (d) => teamPlace(d.seed, d.score, d.round))
+                        .attr('scale', '0.1 0.1 0.1') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
+                        .attr('position', (d) => teamPlace(d.Seed, d.Points, d.Round))
                         .attr('event-set_mouseenter', 'material.opacity: 0.5')
                         .attr('event-set_mouseleave', 'material.opacity: 1')
 
@@ -60,8 +60,8 @@
                     .attr('color', 'yellow')
                     .attr('opacity', 0.1)
                     .attr('rotation', '90 0 0')
-                    .attr('radius', (d) => r_scale(d.score))
-                    .attr('position', (d) => `0 ${y_scale(d.round)} 0`)
+                    .attr('radius', (d) => r_scale(d.Points))
+                    .attr('position', (d) => `0 ${y_scale(d.Round)} 0`)
     })
 
 
