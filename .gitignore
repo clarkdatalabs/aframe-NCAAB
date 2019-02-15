@@ -915,3 +915,4 @@ python/venv/lib/python3.7/site-packages/wheel/cli/__pycache__/install.cpython-37
 python/venv/lib/python3.7/site-packages/wheel/cli/__pycache__/pack.cpython-37.pyc
 python/venv/lib/python3.7/site-packages/wheel/cli/__pycache__/unpack.cpython-37.pyc
 python/venv/pip-selfcheck.json
+aFrame/.DS_Store
