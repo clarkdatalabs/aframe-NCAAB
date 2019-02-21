@@ -11,7 +11,7 @@
     const yInterval_initial = -10,
           yInterval = 5,
           numbersOfTemas = [64, 32, 16, 8, 4, 2, 1],
-          angleInterval = Math.PI / (numbersOfTemas[0] / 2),
+          angleInterval = 2* Math.PI / (16),
           maxR = 10;
 
 //parameters that need csv
@@ -32,7 +32,6 @@
         let x_position = Math.cos(angleInterval * (teamIndex - 1)) * this_r,
             y_position = y_scale(round),
             z_position = Math.sin(angleInterval * (teamIndex - 1)) * this_r;
-
         return(`${x_position} ${y_position} ${z_position}`);
     };
 
@@ -47,8 +46,16 @@
                         .attr('color', 'blue') // here the color can be changed based on leage or something (maybe another scale is needed)
                         .attr('scale', '0.1 0.1 0.1') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
                         .attr('position', (d) => teamPlace(d.Seed, d.Points, d.Round))
-                        .attr('event-set_mouseenter', 'material.opacity: 0.5')
-                        .attr('event-set_mouseleave', 'material.opacity: 1')
+                        .attr('event-set__mouseenter', function(d){
+                            return 'material.opacity: 0.5';
+                        })
+                        .attr('event-set__mouseleave', function(){
+                            return 'material.opacity: 1';
+                        })
+                        .on('mouseenter', function(d){
+                            console.log(d.Seed, " & ", d.Market)
+                        })
+
 
         // create the circles as round scales
             aEntity.selectAll('.circleRuller')
