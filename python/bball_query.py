@@ -59,21 +59,32 @@ query = """
 """
 
 df = ncaa_basketball.query_to_pandas_safe(query, max_gb_scanned=1)
+
+#Convert Columns to 10 pt Scale
+WinPts = df["win_pts"]
+low = min(WinPts)
+high = max(WinPts)
+WinPts_inds = [float(10*(x-low)/(high-low)) for x in WinPts] #gives items a value from 0-10
+
+print(WinPts_inds)
+
+
+
 #df.to_csv(r'generated_data/'+'2013_season'+'.csv')
-df.to_csv('2013_season'+'.csv')
+#df.to_csv('2013_season'+'.csv')
 
 
 # Print 10000 Records of Each Table
 '''
-for x in tables:
-    df = ncaa_basketball.head(x,10000)
-    df.to_csv(r'generated_data/'+str(x)+'.csv')
-    print('Generated '+ str(x))
+    for x in tables:
+        df = ncaa_basketball.head(x,10000)
+        df.to_csv(r'generated_data/'+str(x)+'.csv')
+        print('Generated '+ str(x))
 
 # Table schema
-for x in tables:
-    df = ncaa_basketball.table_schema(x)
-    print(df)
+    for x in tables:
+        df = ncaa_basketball.table_schema(x)
+        print(df)
 '''
 
 
