@@ -39,7 +39,7 @@ old_query2 = """
         2013 = season;
 """
 
-query = """
+old_query3 = """
     SELECT 
         season,
         round,
@@ -58,33 +58,30 @@ query = """
     WHERE 2013 = season;
 """
 
+query = """
+    SELECT 
+        *
+    FROM `bigquery-public-data.ncaa_basketball.mbb_games_sr` as teams_game
+    WHERE teams_game.season = 2013
+    AND teams_game.tournament = 'NCAA'
+    AND teams_game.tournament_type IN ('South Regional', 'West Regional', 'National Championship','East Regional','First Four','Midwest Regional','Final Four');
+"""
+
 df = ncaa_basketball.query_to_pandas_safe(query, max_gb_scanned=1)
 
 #Convert Columns to 10 pt Scale
+'''
 WinPts = df["win_pts"]
 low = min(WinPts)
 high = max(WinPts)
 WinPts_inds = [float(10*(x-low)/(high-low)) for x in WinPts] #gives items a value from 0-10
 
 print(WinPts_inds)
+'''
 
 
-
-#df.to_csv(r'generated_data/'+'2013_season'+'.csv')
+df.to_csv(r'generated_data/'+'2013_season_detailed'+'.csv')
 #df.to_csv('2013_season'+'.csv')
 
-
-# Print 10000 Records of Each Table
-'''
-    for x in tables:
-        df = ncaa_basketball.head(x,10000)
-        df.to_csv(r'generated_data/'+str(x)+'.csv')
-        print('Generated '+ str(x))
-
-# Table schema
-    for x in tables:
-        df = ncaa_basketball.table_schema(x)
-        print(df)
-'''
 
 
