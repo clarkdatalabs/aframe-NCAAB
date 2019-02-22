@@ -5,6 +5,7 @@
 
         <script src="//aframe.io/releases/0.8.2/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-event-set-component@^4.0.0/dist/aframe-event-set-component.min.js"></script>
+        <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
 
         <script src="https://d3js.org/d3.v5.min.js"></script>
     </head>
@@ -24,7 +25,7 @@
                 <a-entity id="head" camera wasd-controls="fly: true" look-controls></a-entity>
                 <a-entity id="hand" raycaster="showLine: true"
                             line="color: white; opacity: 0.25" laser-controls="hand:right"
-                            teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; button: grip"></a-entity>
+                            teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; button: touchpad"></a-entity>
             </a-entity>
 
 
