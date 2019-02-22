@@ -53,3 +53,8 @@ Run the following in the javascript folder to start your own server
 ```
 python -m SimpleHTTPServer
 ```
+
+### Browser
+```
+https://hopetambala.github.io/aframe-NCAAB/aFrame/
+```
