@@ -11,41 +11,54 @@
     const yInterval_initial = -10,
           yInterval = 5,
           numbersOfTemas = [64, 32, 16, 8, 4, 2, 1],
-          angleInterval = 2* Math.PI / (16),
+          angleInterval = 2* Math.PI / (65),
           maxR = 10;
 
-//parameters that need csv
-    const maxPoint = 200,
-          minPoint = 20;
 
 
     const y_scale = d3.scaleOrdinal()
-                            .domain([64, 32, 16, 8, 4, 2, 1])
-                            .range([-30, -20, -10, 0, 10, 20, 30]);
-
-    const r_scale = d3.scaleLinear()
-                            .domain([minPoint, maxPoint])
-                            .range([maxR, 0]);
-
-    const teamPlace = (teamIndex, score, round) => {
-        let this_r = r_scale(score);
-        let x_position = Math.cos(angleInterval * (teamIndex - 1)) * this_r,
-            y_position = y_scale(round),
-            z_position = Math.sin(angleInterval * (teamIndex - 1)) * this_r;
-        return(`${x_position} ${y_position} ${z_position}`);
-    };
+                            // .domain([64, 32, 16, 8, 4, 2, 1])
+                            .domain(['First Round', 'Second Round', 'Third Round', 'Sweet 16', 'Elite 8', 'Semifinals', 'Final 2'])
+                            .range([-15, -10, -5, 0, 5, 10, 15]);
 
 
-    d3.csv('2013_season_clean.csv').then(function(data){
+
+
+
+    d3.csv('2013_season_detailed_cleaned.csv').then(function(data){
+        var points = [];
+        data.forEach((d)=>{
+            points.push(+d.points);
+        })
+
+        //parameters that need csv
+        const maxPoint = Math.max(...points),
+              minPoint = Math.min(...points);
+
+        const r_scale = d3.scaleLinear()
+                              .domain([minPoint, maxPoint])
+                              .range([maxR, 0]);
+
+        const teamPlace = (teamIndex, score, round) => {
+            let this_r = r_scale(score);
+            let x_position = Math.cos(angleInterval * (teamIndex - 1)) * this_r,
+                y_position = y_scale(round),
+                z_position = Math.sin(angleInterval * (teamIndex - 1)) * this_r;
+            return(`${x_position} ${y_position} ${z_position}`);
+        };
+
+
         // create the spheres as teams
             aEntity.selectAll('.team')
                     .data(data)
                     .enter()
                     .append('a-sphere')
                         .classed('team', true)
-                        .attr('color', 'blue') // here the color can be changed based on leage or something (maybe another scale is needed)
+                        .attr('color', (d)=> d.market == 'Michigan' ? 'blue' : 'orange') // here the color can be changed based on leage or something (maybe another scale is needed)
                         .attr('scale', '0.1 0.1 0.1') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
-                        .attr('position', (d) => teamPlace(d.Seed, d.Points, d.Round))
+                        .attr('position', (d) => {
+                            return teamPlace(d.id, d.points, d.tournament_round)
+                        })
                         .attr('event-set__mouseenter', function(d){
                             return 'material.opacity: 0.5';
                         })
@@ -53,8 +66,9 @@
                             return 'material.opacity: 1';
                         })
                         .on('mouseenter', function(d){
-                            console.log(d.Seed, " & ", d.Market)
+                            console.log(d.points, " & ", d.market, ' ', d.name, " & ", d.tournament_round)
                         })
+
 
 
         // create the circles as round scales
@@ -67,8 +81,8 @@
                     .attr('color', 'yellow')
                     .attr('opacity', 0.1)
                     .attr('rotation', '90 0 0')
-                    .attr('radius', (d) => r_scale(d.Points))
-                    .attr('position', (d) => `0 ${y_scale(d.Round)} 0`)
+                    .attr('radius', (d) => r_scale(d.points))
+                    .attr('position', (d) => `0 ${y_scale(d.tournament_round)} 0`)
     })
 
 
