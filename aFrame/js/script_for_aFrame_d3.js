@@ -11,24 +11,31 @@
     const yInterval_initial = -10,
           yInterval = 5,
           numbersOfTemas = [64, 32, 16, 8, 4, 2, 1],
-          angleInterval = 2* Math.PI / (65),
+          angleInterval = 2* Math.PI / 64,
           maxR = 10;
 
 
 
     const y_scale = d3.scaleOrdinal()
                             // .domain([64, 32, 16, 8, 4, 2, 1])
-                            .domain(['First Round', 'Second Round', 'Third Round', 'Sweet 16', 'Elite 8', 'Semifinals', 'Final 2'])
+                            .domain(['First 4', 'First Round', 'Second Round', 'Sweet 16', 'Elite Eight', 'Semifinals', 'Final 2'])
                             .range([-15, -10, -5, 0, 5, 10, 15]);
 
 
+// function to get the uniquename of a team
+    const getName = (data) => data.market + ' ' + data.name;
 
 
+    d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
+        var points = [],
+            teams = {},
+            teamId = 0;
 
-    d3.csv('2013_season_detailed_cleaned.csv').then(function(data){
-        var points = [];
         data.forEach((d)=>{
-            points.push(+d.points);
+            points.push(+d.points_game);
+
+            let teamName = getName(d);
+            if(! teams.hasOwnProperty(teamName)) teams[teamName] = teamId++;
         })
 
         //parameters that need csv
@@ -39,6 +46,7 @@
                               .domain([minPoint, maxPoint])
                               .range([maxR, 0]);
 
+        // function to position a team at a round
         const teamPlace = (teamIndex, score, round) => {
             let this_r = r_scale(score);
             let x_position = Math.cos(angleInterval * teamIndex) * this_r,
@@ -57,7 +65,7 @@
                         .attr('color', (d)=> d.market == 'Michigan' ? 'blue' : 'orange') // here the color can be changed based on leage or something (maybe another scale is needed)
                         .attr('scale', '0.1 0.1 0.1') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
                         .attr('position', (d) => {
-                            return teamPlace(d.id, d.points, d.tournament_round)
+                            return teamPlace(teams[getName(d)], d.points_game, d.tournament_round)
                         })
                         .attr('event-set__mouseenter', function(d){
                             return 'material.opacity: 0.5';
@@ -66,7 +74,7 @@
                             return 'material.opacity: 1';
                         })
                         .on('mouseenter', function(d){
-                            console.log(d.points, " & ", d.market, ' ', d.name, " & ", d.tournament_round)
+                            console.log(d.points_game, " & ", getName(d), " & ", teams[getName(d)], " & ", d.tournament_round)
                         })
 
 
@@ -81,7 +89,7 @@
                     .attr('color', 'yellow')
                     .attr('opacity', 0.1)
                     .attr('rotation', '90 0 0')
-                    .attr('radius', (d) => r_scale(d.points))
+                    .attr('radius', (d) => r_scale(d.points_game))
                     .attr('position', (d) => `0 ${y_scale(d.tournament_round)} 0`)
     })
 
