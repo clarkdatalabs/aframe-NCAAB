@@ -62,7 +62,7 @@ query = """
     SELECT 
         *
     FROM `bigquery-public-data.ncaa_basketball.mbb_games_sr` as teams_game
-    WHERE teams_game.season = 2013
+    WHERE teams_game.season = 2012
     AND teams_game.tournament = 'NCAA'
     AND teams_game.tournament_type IN ('South Regional', 'West Regional', 'National Championship','East Regional','First Four','Midwest Regional','Final Four');
 """
@@ -80,7 +80,7 @@ print(WinPts_inds)
 '''
 
 
-df.to_csv(r'generated_data/'+'2013_season_detailed'+'.csv')
+df.to_csv(r'generated_data/'+'2012_season_detailed'+'.csv')
 #df.to_csv('2013_season'+'.csv')
 
 
