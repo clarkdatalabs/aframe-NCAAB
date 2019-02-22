@@ -41,9 +41,9 @@
 
         const teamPlace = (teamIndex, score, round) => {
             let this_r = r_scale(score);
-            let x_position = Math.cos(angleInterval * (teamIndex - 1)) * this_r,
+            let x_position = Math.cos(angleInterval * teamIndex) * this_r,
                 y_position = y_scale(round),
-                z_position = Math.sin(angleInterval * (teamIndex - 1)) * this_r;
+                z_position = Math.sin(angleInterval * teamIndex) * this_r;
             return(`${x_position} ${y_position} ${z_position}`);
         };
 
