@@ -62,7 +62,7 @@ query = """
     SELECT 
         *
     FROM `bigquery-public-data.ncaa_basketball.mbb_games_sr` as teams_game
-    WHERE teams_game.season = 2012
+    WHERE teams_game.season = 2017
     AND teams_game.tournament = 'NCAA'
     AND teams_game.tournament_type IN ('South Regional', 'West Regional', 'National Championship','East Regional','First Four','Midwest Regional','Final Four');
 """
