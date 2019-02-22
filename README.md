@@ -55,6 +55,6 @@ python -m SimpleHTTPServer
 ```
 
 ### Browser
-```
-https://hopetambala.github.io/aframe-NCAAB/aFrame/
-```
+
+[In-Browser](https://hopetambala.github.io/aframe-NCAAB/aFrame/)
+
