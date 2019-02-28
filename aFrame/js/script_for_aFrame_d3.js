@@ -14,6 +14,13 @@
           angleInterval = 2* Math.PI / 64,
           maxR = 10;
 
+    //colors assignment
+        const color_normalTeam = 'orange',
+              color_theTeam = 'blue',
+              color_circleScale = 'white',
+              color_oppositeLine = 'red',
+              color_selfCurve = 'green';
+
     const y_scale = d3.scaleOrdinal()
                       .domain(['First 4', 'First Round', 'Second Round', 'Sweet 16', 'Elite Eight', 'Semifinals', 'Final 2'])
                       .range([-15, -10, -5, 0, 5, 10, 15]);
@@ -25,8 +32,9 @@
 
     d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
         var points = [], // to collect all points
-            teams = {}, // to have each unique team collected
-            teamId = 0;
+            teams = {}, // to have each unique team collected and assigne teamIndex
+            teamId = 0,
+            gameTeamIdPositions = {}; // get the pairs of id (in csv) & point position
 
         data.forEach((d)=>{
             points.push(+d.points_game);
@@ -59,10 +67,12 @@
                     .enter()
                     .append('a-sphere')
                         .classed('team', true)
-                        .attr('color', (d)=> d.market == 'Michigan' ? 'blue' : 'orange') // here the color can be changed based on leage or something (maybe another scale is needed)
+                        .attr('color', (d)=> d.market == 'Michigan' ? color_theTeam : color_normalTeam) // here the color can be changed based on leage or something (maybe another scale is needed)
                         .attr('scale', '0.1 0.1 0.1') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
                         .attr('position', (d) => {
-                            return teamPlace(teams[getName(d)], d.points_game, d.tournament_round)
+                            let thisPosition = teamPlace(teams[getName(d)], d.points_game, d.tournament_round);
+                            gameTeamIdPositions[d.id] = thisPosition;
+                            return thisPosition;
                         })
                         .attr('event-set__mouseenter', function(d){ // a-frame way of on "mouseenter"
                             return 'material.opacity: 0.5';
@@ -78,27 +88,34 @@
 
         // create the circles as round scales (the lower the score, the outer)
             // set the lineweight
-                var ringLineWeight = 0.025;
+                var ringLineWeight = 0.005;
             // draw it
                 aEntity.selectAll('.circleRuller')
                         .data(data)
                         .enter()
-                        .append('a-ring')
+                        .append('a-torus')
                         .classed('circleRuller', true)
                         .attr('side', 'double')
-                        .attr('color', 'red')
+                        .attr('color', color_circleScale)
                         .attr('opacity', 0.1)
                         .attr('rotation', '90 0 0')
-                        .attr('radius-outer', (d) => r_scale(d.points_game) + ringLineWeight/2)
-                        .attr('radius-inner', (d) => r_scale(d.points_game) - ringLineWeight/2)
-                        .attr('segments-theta', 150)
+                        .attr('radius', (d) => r_scale(d.points_game) + ringLineWeight/2)
+                        .attr('radius-tubular', ringLineWeight)
+                        .attr('segments-tubular', 150)
                         .attr('position', (d) => `0 ${y_scale(d.tournament_round)} 0`)
 
 
-
-        // create the lines between the opposite teams
-            aEntity.selecetAll('.rivalLine')
-                    .data(data)
-                    .enter()
-                    .append('')
+        // // create the lines between the opposite teams
+        //     const data_firstHalf = data.slice(0, 67);
+        //     aEntity.selectAll('.rivalLine')
+        //             .data(data_firstHalf)
+        //             .enter()
+        //             .append('a-entity')
+        //             .classed('rivalLine', true)
+        //             .attr('line', (d)=>{
+        //                 //format: <a-entity line="start: 0, 1, 0; end: 2 0 -5; color: red"></a-entity>
+        //                 let thisTeamPosition = gameTeamIdPositions[d.id],
+        //                     thatTeamPosition = gameTeamIdPositions[d.id + 67];
+        //                 return `start: ${thisTeamPosition}; end: ${thatTeamPosition}; color: ${color_oppositeLine}`;
+        //             })
     })
