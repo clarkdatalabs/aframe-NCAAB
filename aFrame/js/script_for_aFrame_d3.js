@@ -88,34 +88,48 @@
 
         // create the circles as round scales (the lower the score, the outer)
             // set the lineweight
-                var ringLineWeight = 0.005;
-            // draw it
+                var torusLineWeight = 0.005,
+                    ringLineWeight = 0.025;
+            // draw it the 3D way
                 aEntity.selectAll('.circleRuller')
                         .data(data)
                         .enter()
                         .append('a-torus')
                         .classed('circleRuller', true)
-                        .attr('side', 'double')
                         .attr('color', color_circleScale)
                         .attr('opacity', 0.1)
                         .attr('rotation', '90 0 0')
-                        .attr('radius', (d) => r_scale(d.points_game) + ringLineWeight/2)
-                        .attr('radius-tubular', ringLineWeight)
-                        .attr('segments-tubular', 150)
+                        .attr('radius', (d) => r_scale(d.points_game))
+                        .attr('radius-tubular', torusLineWeight)
+                        .attr('segments-tubular', 100)
                         .attr('position', (d) => `0 ${y_scale(d.tournament_round)} 0`)
+            // // or draw it the 2D way
+            //     aEntity.selectAll('.circleRuller')
+            //             .data(data)
+            //             .enter()
+            //             .append('a-ring')
+            //             .classed('circleRuller', true)
+            //             .attr('side', 'double')
+            //             .attr('color', color_circleScale)
+            //             .attr('opacity', 0.1)
+            //             .attr('rotation', '90 0 0')
+            //             .attr('radius-outer', (d) => r_scale(d.points_game) + ringLineWeight/2)
+            //             .attr('radius-inner', (d) => r_scale(d.points_game) - ringLineWeight/2)
+            //             .attr('segments-theta', 100)
+            //             .attr('position', (d) => `0 ${y_scale(d.tournament_round)} 0`)
 
 
-        // // create the lines between the opposite teams
-        //     const data_firstHalf = data.slice(0, 67);
-        //     aEntity.selectAll('.rivalLine')
-        //             .data(data_firstHalf)
-        //             .enter()
-        //             .append('a-entity')
-        //             .classed('rivalLine', true)
-        //             .attr('line', (d)=>{
-        //                 //format: <a-entity line="start: 0, 1, 0; end: 2 0 -5; color: red"></a-entity>
-        //                 let thisTeamPosition = gameTeamIdPositions[d.id],
-        //                     thatTeamPosition = gameTeamIdPositions[d.id + 67];
-        //                 return `start: ${thisTeamPosition}; end: ${thatTeamPosition}; color: ${color_oppositeLine}`;
-        //             })
+        // create the lines between the opposite teams
+            const data_firstHalf = data.slice(0, 67);
+            aEntity.selectAll('.rivalLine')
+                    .data(data_firstHalf)
+                    .enter()
+                    .append('a-entity')
+                    .classed('rivalLine', true)
+                    .attr('line', (d)=>{
+                        //format: <a-entity line="start: 0, 1, 0; end: 2 0 -5; color: red"></a-entity>
+                        let thisTeamPosition = gameTeamIdPositions[d.id],
+                            thatTeamPosition = gameTeamIdPositions[+d.id + 67];
+                        return `start: ${thisTeamPosition}; end: ${thatTeamPosition}; color: ${color_oppositeLine}; opacity: 0.75`;
+                    })
     })
