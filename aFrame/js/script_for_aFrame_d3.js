@@ -76,6 +76,77 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
     };
 
 
+    // create curves among the team itself of different rounds
+        // collection for all the a-curves
+            var curves = {}; // {teamUniqueNames: 0, teamUniqueNames: 1, ...} teamUniqueNames for teams that already been detected, 0 means it has only one point so no curve, 1 means it has a curve
+            var thisCurve;
+        // FUNCTION create the curves among the team itself at different rounds
+            const drawTeamCurve = (teamUniqueName) => {
+                console.log('draw a selfCurve for ', teamUniqueName);
+
+                let curveId = `#${teamUniqueName}`;
+                // // delete existing draw_curve
+                //     d3.select('a-draw-curve').remove();
+                // if the team has been detected
+                    if (curves.hasOwnProperty(teamUniqueName)){
+                        // if the team has a curve, then draw it
+                            if (curves[teamUniqueName] == 1){  // curve is {teamUniqueNames: 0, teamUniqueNames: 1, ...}. teamUniqueNames for teams that already been detected, 0 means it has only one point so no curve, 1 means it has a curve
+                                aEntity.append('a-draw-curve')
+                                        .attr('material', `shader: line; color: ${color_selfCurve};`)
+                                        .attr('curveref', curveId);
+
+                                console.log("This team is in record, draw again!");
+                            } else{
+                                console.log("This team is in record, but it does not make any progress in the tournament...");
+                            }
+                    }
+                // if the team has not been detected, then let's detect
+                    else {
+                        let positions = teamsSelfPositions[teamUniqueName];  // {teamName:[points], ...}, this is generated when the node was generated
+                        console.log("positions this time: ",positions)
+                        // if the team has only one point, it will have no curve, so just record it
+                            if (positions.length == 1) {
+                                // record
+                                    curves[teamUniqueName] = 0;
+
+                                console.log("Have put this team in record, but it does not make any progress in the tournament...");
+                            }
+                        // else, record it, construct the curve, and then draw it
+                            else {
+                                // record
+                                    curves[teamUniqueName] = 1;
+                                // sort the positions array
+                                    positions.sort((a,b)=>{
+                                        var y_a = a.split(" ")[1],
+                                            y_b = b.split(" ")[1];
+                                        return y_a - y_b;
+                                    });
+                                // construct the curve from the array
+                                    thisCurve = aEntity.append('a-curve')
+                                                        .classed('selfCurve', true)
+                                                        .attr('id', teamUniqueName)
+                                // put each point as an a-curve-point into the a-curve
+                                // console.log(positions);
+                                    positions.forEach((p) => {
+                                        thisCurve.append('a-curve-point')
+                                                    .attr('position', p)
+
+                                    })
+
+                                    console.log('the curve is', thisCurve) //->childNodes[0]-> attributes -> position -> ownerElement: a-curve-point -> components -> attrValue
+                                // draw the curve
+                                    aEntity.append('a-draw-curve')
+                                            .attr('id', `${teamUniqueName}Curve`)
+                                            .attr('curveref', () => curveId)
+                                            .attr('material', `color: ${color_selfCurve}; opacity: 0.3`)
+
+
+                                console.log("Have put this team in record, draw!");
+                            }
+                    }
+            }
+
+
     // create the spheres as teams
         aEntity.selectAll('.team')
                 .data(data)
@@ -98,15 +169,40 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
 
                         return thisPosition;
                     })
-                    .attr('event-set__mouseenter', function(d){ // a-frame way of on "mouseenter"
-                        return 'material.opacity: 0.5';
-                    })
-                    .attr('event-set__mouseleave', function(){ // a-frame way of on "mouseleave"
-                        return 'material.opacity: 1';
-                    })
+                    // .attr('event-set__mouseenter', function(d){ // a-frame way of on "mouseenter"
+                    //     return 'material.opacity: 0.5';
+                    // })
+                    // .attr('event-set__mouseleave', function(){ // a-frame way of on "mouseleave"
+                    //     return 'material.opacity: 1';
+                    // })
                     .on('mouseenter', function(d){
-                        console.log(d.points_game, " & ", getName(d), " & ", teams[getName(d)], " & ", d.tournament_round)
-                        drawTeamCurve(getName(d));
+                        this.setAttribute('opacity', '0.5');
+                        let teamUniqueName = getName(d);
+                        // console.log(d.points_game, " & ", teamUniqueName, " & ", teams[teamUniqueName], " & ", d.tournament_round)
+                        let selectedCurve = document.querySelector(`#${teamUniqueName}Curve`);
+                        selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
+
+
+                        console.log(this)
+                    })
+                    .on('mouseleave', function(d){
+                        this.setAttribute('opacity', '1');
+                        let teamUniqueName = getName(d),
+                            selectedCurve = document.querySelector(`#${teamUniqueName}Curve`),
+                            currentCurveOpacity = selectedCurve.getAttribute('material').opacity;
+                        if(currentCurveOpacity == 0.8) {
+                            selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.3`);
+                        }
+                    })
+                    .on('click', function(d){
+                        let teamUniqueName = getName(d),
+                            selectedCurve = document.querySelector(`#${teamUniqueName}Curve`),
+                            currentCurveOpacity = selectedCurve.getAttribute('material').opacity;
+                        if(currentCurveOpacity == 0.8) {
+                            selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 1`);
+                        } else {
+                            selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
+                        }
                     })
 
 
@@ -159,100 +255,18 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 })
 
 
-    // create curves among the team itself of different rounds
-        // collection for all the a-curves
-            var curves = {}; // {teamUniqueNames: 0, teamUniqueNames: 1, ...} teamUniqueNames for teams that already been detected, 0 means it has only one point so no curve, 1 means it has a curve
-            var thisCurve;
-        // FUNCTION create the curves among the team itself at different rounds
-            const drawTeamCurve = (teamUniqueName) => {
-                console.log('selfCurve!');
-                console.log(teamUniqueName);
-
-                let curveId = `#${teamUniqueName}`;
-                // delete existing draw_curve
-                    d3.select('a-draw-curve').remove();
-                // if the team has been detected
-                    if (curves.hasOwnProperty(teamUniqueName)){
-                        // if the team has a curve, then draw it
-                            if (curves[teamUniqueName] == 1){
-                                aEntity.append('a-draw-curve')
-                                        .attr('material', `shader: line; color: ${color_selfCurve};`)
-                                        .attr('curveref', curveId);
-
-                                console.log("This team is in record, draw again!");
-                            } else{
-                                console.log("This team is in record, it 'sucks'...");
-                            }
-                    }
-                // if the team has not been detected, then let's detect
-                    else {
-                        let positions = teamsSelfPositions[teamUniqueName];
-                        console.log("positions this time: ",positions)
-                        // if the team has only one point, it will have no curve, so just record it
-                            if (positions.length == 1) {
-                                // record
-                                    curves[teamUniqueName] = 0;
-
-                                console.log("Have put this team in record, it 'sucks'...");
-                            }
-                        // else, record it, construct the curve, and then draw it
-                            else {
-                                // record
-                                    curves[teamUniqueName] = 1;
-                                // sort the positions array
-                                    positions.sort((a,b)=>{
-                                        var y_a = a.split(" ")[1],
-                                            y_b = b.split(" ")[1];
-                                        return y_a - y_b;
-                                    });
-                                // construct the curve from the array
-                                    thisCurve = aEntity.append('a-curve')
-                                                        .classed('selfCurve', true)
-                                                        .attr('id', teamUniqueName)
-                                // put each point as an a-curve-point into the a-curve
-                                // console.log(positions);
-                                    positions.forEach((p) => {
-                                        thisCurve.append('a-curve-point')
-                                                    .attr('position', p)
-
-                                    })
-                                // draw the curve
-                                    aEntity.append('a-draw-curve')
-                                            .attr('curveref', () => curveId)
-                                            .attr('material', `color: ${color_selfCurve};`)
 
 
-                                console.log("Have put this team in record, draw!");
-                            }
-                    }
 
-            }
-
-
-    // Draw a curve for real
+    // Draw all curves, because for some reasons, draw curves one by one does not work...
         var teamUniqueNames = Object.keys(teams);
         // console.log(teamUniqueNames)
-        drawTeamCurve(teamUniqueNames[18]);
+        teamUniqueNames.forEach((uniqueName) => {
+            console.log(uniqueName);
+            drawTeamCurve(uniqueName)
+        })
+        // drawTeamCurve(teamUniqueNames[18]);
 
-    //NOTE:
-        //problem:
-            //the curve's position has an offset if it's on by hovering a point...
-            // try:
-                // the points for UMich if it's hovered:
-                                                        // 0: "-1.3557124072307212 -10 6.8156265248360075"
-                                                        // 1: "-1.2565139384089614 -5 6.3169221449699595"
-                                                        // 2: "-0.09919846882176019 0 0.49870437986604976"
-                                                        // 3: "-1.4549108760524814 5 7.314330904702057"
-                                                        // 4: "-1.091183157039361 10 5.485748178526543"
-                                                        // 5: "-1.3226462509568013 15 6.6493917315473245"
-                // the points for UMich if it's the first (drawTeamCurve(teamUniqueNames[18])):
-                                                        // 0: "-1.3557124072307212 -10 6.8156265248360075"
-                                                        // 1: "-1.2565139384089614 -5 6.3169221449699595"
-                                                        // 2: "-0.09919846882176019 0 0.49870437986604976"
-                                                        // 3: "-1.4549108760524814 5 7.314330904702057"
-                                                        // 4: "-1.091183157039361 10 5.485748178526543"
-                                                        // 5: "-1.3226462509568013 15 6.6493917315473245"
-            // so there is no problem.... wait to see why
 
 
 
