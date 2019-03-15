@@ -12,7 +12,8 @@
           yInterval = 5,
           numbersOfTemas = [64, 32, 16, 8, 4, 2, 1],
           angleInterval = 2* Math.PI / 64,
-          maxR = 10;
+          maxR = 10,
+          heights = [-15, -10, -5, 0, 5, 10, 15]; // the actual heights of each round in the VR
 
     //colors assignment
         const color_normalTeam = 'orange',
@@ -23,7 +24,7 @@
 
     const y_scale = d3.scaleOrdinal()
                       .domain(['First 4', 'First Round', 'Second Round', 'Sweet 16', 'Elite Eight', 'Semifinals', 'Final 2'])
-                      .range([-15, -10, -5, 0, 5, 10, 15]);
+                      .range(heights);
 
 
 // FUNCTION to get the uniquename of a team
@@ -40,7 +41,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
     var points = [], // 1.0 to collect points get by all games, for min/max ponits
         teams = {}, // 2.0 {teamUniqueName: teamIndex} to have each unique team collected and assigned teamIndex
         teamIndex = 0, // 2.1 teamIndex, this is to assign each team on specific angels
-        gameTeamIdPositions = {}; // 3.0 {id: point, id: point, ...} get the pairs of id (in csv) & point position, This is for lines between opposite teams
+        gameTeamIdPositions = {}, // 3.0 {id: point, id: point, ...} get the pairs of id (in csv) & point position, This is for lines between opposite teams
         teamsSelfPositions = {}; // 2.2 {teamName:[points], ...} This is for curves among themselves through rounds
 
     // assigne teamIndex to each team named teamUniqueName
@@ -75,7 +76,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
             var thisCurve;
         // FUNCTION create the curves among the team itself at different rounds
             const drawTeamCurve = (teamUniqueName) => {
-                console.log('draw a selfCurve for ', teamUniqueName);
+                // console.log('draw a selfCurve for ', teamUniqueName);
 
                 let curveId = `#${teamUniqueName}`;
                 // // delete existing draw_curve
@@ -88,21 +89,21 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                                         .attr('material', `shader: line; color: ${color_selfCurve};`)
                                         .attr('curveref', curveId);
 
-                                console.log("This team is in record, draw again!");
+                                // console.log("This team is in record, draw again!");
                             } else{
-                                console.log("This team is in record, but it does not make any progress in the tournament...");
+                                // console.log("This team is in record, but it does not make any progress in the tournament...");
                             }
                     }
                 // if the team has not been detected, then let's detect
                     else {
                         let positions = teamsSelfPositions[teamUniqueName];  // {teamName:[points], ...}, this is generated when the node was generated
-                        console.log("positions this time: ",positions)
+                        // console.log("positions this time: ",positions)
                         // if the team has only one point, it will have no curve, so just record it
                             if (positions.length == 1) {
                                 // record
                                     curves[teamUniqueName] = 0;
 
-                                console.log("Have put this team in record, but it does not make any progress in the tournament...");
+                                // console.log("Have put this team in record, but it does not make any progress in the tournament...");
                             }
                         // else, record it, construct the curve, and then draw it
                             else {
@@ -126,7 +127,6 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
 
                                     })
 
-                                    console.log('the curve is', thisCurve) //->childNodes[0]-> attributes -> position -> ownerElement: a-curve-point -> components -> attrValue
                                 // draw the curve
                                     aEntity.append('a-draw-curve')
                                             .attr('id', `${teamUniqueName}Curve`)
@@ -134,7 +134,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                                             .attr('material', `color: ${color_selfCurve}; opacity: 0.3`)
 
 
-                                console.log("Have put this team in record, draw!");
+                                // console.log("Have put this team in record, draw!");
                             }
                     }
             }
@@ -216,7 +216,11 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                     .attr('radius', (d) => r_scale(d.points_game))
                     .attr('radius-tubular', torusLineWeight)
                     .attr('segments-tubular', 100)
-                    .attr('position', (d) => `0 ${y_scale(d.tournament_round)} 0`)
+                    .attr('position', (d) => {
+                        let thisHeight = y_scale(d.tournament_round);
+                        return `0 ${thisHeight} 0`;
+                    })
+
         // // or draw it the 2D way
         //     aEntity.selectAll('.circleRuller')
         //             .data(data)
@@ -231,6 +235,38 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
         //             .attr('radius-inner', (d) => r_scale(d.points_game) - ringLineWeight/2)
         //             .attr('segments-theta', 100)
         //             .attr('position', (d) => `0 ${y_scale(d.tournament_round)} 0`)
+
+    // create the target to move to a different height
+        const headRig = d3.select("#cameraRig");
+        var heightAt = 0;
+        aEntity.selectAll(".heightPort")
+                .data(heights)
+                .enter()
+                .append('a-ring')
+                .classed('heightPort', true)
+                .attr('id',(d) => `heightPort_${d}`)
+                .attr('position', (d) => `0 ${d} 0`)
+                .attr('radius-outer', '15')
+                .attr('radius-inner', '14.5')
+                .attr('rotation', '90 0 0')
+                .attr('side', 'double')
+                .attr('segments-theta', 100)
+                .attr('color', 'gold')
+                .attr('opacity', 0.1)
+                .attr('event-set__mouseenter', 'opacity: 0.8')
+                .attr('event-set__mouseleave', 'opacity: 0.1')
+                .on('click', (d) => {
+                    // console.log(headRig.attr('position'))
+                    let targetHeight = d;
+                    let currentPosition = headRig.attr('position');
+                    let targetPosition = currentPosition;
+                    targetPosition.y = targetHeight;
+
+                    // console.log(targetHeight)
+
+                    headRig.attr('position', targetPosition)
+                })
+
 
 
     // create the lines between the opposite teams
@@ -248,18 +284,12 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 })
 
 
-
-
-
     // Draw all curves, because for some reasons, draw curves one by one does not work...
         var teamUniqueNames = Object.keys(teams);
-        // console.log(teamUniqueNames)
         teamUniqueNames.forEach((uniqueName) => {
-            console.log(uniqueName);
+            // console.log(uniqueName);
             drawTeamCurve(uniqueName)
         })
-        // drawTeamCurve(teamUniqueNames[18]);
-
 
 
 
