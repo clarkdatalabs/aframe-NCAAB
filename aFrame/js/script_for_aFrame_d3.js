@@ -4,7 +4,14 @@
     const aEntity = aScene.append('a-entity')
                             .attr('id', 'whole')
                             .attr('position', '0 0 -15');
-
+    
+    //Create HUD
+    const aHead = d3.select('#head');
+    const hud = aHead.append('a-entity')
+                        //.attr('id','hud')
+                        .attr('geometry','primitive: plane; height: 0.2; width: 0.2')
+                        .attr('position','-2 1 -1.5') //X,Y,Z
+                        .attr('material',"color: gray; opacity: 0.0");
 
 
 // independent parameters
@@ -34,7 +41,7 @@
         return usableMarketName + '_' + usableTeamName;
     }
 
-
+    
 
 
 d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
