@@ -250,6 +250,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
     // create the target to move to a different height
         const headRig = d3.select("#cameraRig");
         var heightAt = 0;
+        // console.log("hey");
         aEntity.selectAll(".heightPort")
                 .data(heights)
                 .enter()
@@ -274,17 +275,11 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                     targetPosition.y = targetHeight;
 
                     //change the plane the teleport curve touch as the height changes
-                    let hand = document.querySelector("#hand");
-                    let newCollisionEntity= d3.append('a-entity')
-                                                .attr('id','telePortCollisionEntity')
-                                                .attr('geometry','primitive: plane;')
-                                                .attr('position',`0 ${targetHeight} 0`) //X,Y,Z
-                    hand.setAttribute("teleport-controls", "collisionEntities", newCollisionEntity);
+                    let hand = document.querySelector("#hand"),
+                        collidePlane = document.querySelector(".telePortCollisionEntity");
 
-                    // console.log(hand.getAttribute("teleport-controls").collisionEntities);
-
-                    // console.log(targetHeight)
-
+                    collidePlane.setAttribute("position", `0 ${targetHeight} 0`)
+                    
                     headRig.attr('position', targetPosition)
                 })
 
