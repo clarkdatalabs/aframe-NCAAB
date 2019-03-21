@@ -12,7 +12,7 @@
                         .attr('geometry','primitive: plane; height: 0.2; width: 0.2')
                         .attr('position','-2 1 -1.5') //X,Y,Z
                         .attr('material',"color: gray; opacity: 1")
-                        .attr('text','value: noooooo');
+                        .attr('text','color: white; align: center; value: noooooo; width:1.5');
 
 
 // independent parameters
@@ -184,8 +184,8 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                         selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
 
                         //HUD Doesn't Work
-                        let HUD = document.querySelector('#head');
-                        HUD.setAttribute('text','value:' + teamUniqueName)
+                        
+                        hud.setAttribute('text','value:' + teamUniqueName)
 
                         console.log(this)
                     })
@@ -197,6 +197,10 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                         if(currentCurveOpacity == 0.8) {
                             selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.3`);
                         }
+
+                        hud.setAttribute('text','value:""')
+
+                        console.log(this)
                     })
                     .on('click', function(d){
                         let teamUniqueName = getName(d),
@@ -275,8 +279,15 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                     targetPosition.y = targetHeight;
 
                     //change the plane the teleport curve touch as the height changes
+<<<<<<< HEAD
                     let hand = document.querySelector("#hand"),
                         collidePlane = document.querySelector(".telePortCollisionEntity");
+=======
+                    let hand = document.querySelector("#hand");
+                    hand.setAttribute("teleport-controls", "collisionEntities", "y", targetHeight);
+
+                    // console.log(targetHeight)
+>>>>>>> 3cd6681848709e3028aeb7c4d28fcbc46b5bfdb9
 
                     collidePlane.setAttribute("position", `0 ${targetHeight} 0`)
                     
