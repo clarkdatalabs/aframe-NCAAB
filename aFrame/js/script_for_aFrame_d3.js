@@ -275,7 +275,10 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
 
                     //change the plane the teleport curve touch as the height changes
                     let hand = document.querySelector("#hand");
-                    hand.setAttribute("teleport-controls", "collisionEntities", "y", targetHeight);
+                    // let newCollisionEntity=
+                    // hand.setAttribute("teleport-controls", "collisionEntities", "primitive: plane; height: 0.2; width: 0.2");
+
+                    console.log(hand.getAttribute("teleport-controls").collisionEntities);
 
                     // console.log(targetHeight)
 
