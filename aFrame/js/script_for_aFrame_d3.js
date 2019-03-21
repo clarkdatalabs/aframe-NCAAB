@@ -257,7 +257,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 .classed('heightPort', true)
                 .attr('id',(d) => `heightPort_${d}`)
                 .attr('position', (d) => `0 ${d} 0`)
-                .attr('radius-outer', '16')
+                .attr('radius-outer', '26')
                 .attr('radius-inner', '14.5')
                 .attr('rotation', '90 0 0')
                 .attr('side', 'double')
