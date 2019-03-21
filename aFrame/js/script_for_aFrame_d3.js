@@ -4,7 +4,7 @@
     const aEntity = aScene.append('a-entity')
                             .attr('id', 'whole')
                             .attr('position', '0 0 -15');
-    
+
     //Create HUD
     const aHead = d3.select('#head');
     const hud = aHead.append('a-entity')
@@ -42,7 +42,7 @@
         return usableMarketName + '_' + usableTeamName;
     }
 
-    
+
 
 
 d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
@@ -155,7 +155,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 .append('a-sphere')
                     .classed('team', true)
                     .attr('color', (d)=> d.market == 'Michigan' ? color_theTeam : color_normalTeam) // here the color can be changed based on leage or something (maybe another scale is needed)
-                    .attr('scale', '0.1 0.1 0.1') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
+                    .attr('scale', '0.15 0.15 0.15') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
                     .attr('position', (d) => {
                         let teamUniqueName = getName(d),
                             thisPosition = teamPlace(teams[teamUniqueName], d.points_game, d.tournament_round);
@@ -182,7 +182,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                         // console.log(d.points_game, " & ", teamUniqueName, " & ", teams[teamUniqueName], " & ", d.tournament_round)
                         let selectedCurve = document.querySelector(`#${teamUniqueName}Curve`);
                         selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
-                        
+
                         //HUD Doesn't Work
                         let HUD = document.querySelector('#head');
                         HUD.setAttribute('text','value:' + teamUniqueName)
@@ -257,7 +257,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 .classed('heightPort', true)
                 .attr('id',(d) => `heightPort_${d}`)
                 .attr('position', (d) => `0 ${d} 0`)
-                .attr('radius-outer', '15')
+                .attr('radius-outer', '16')
                 .attr('radius-inner', '14.5')
                 .attr('rotation', '90 0 0')
                 .attr('side', 'double')
@@ -272,6 +272,10 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                     let currentPosition = headRig.attr('position');
                     let targetPosition = currentPosition;
                     targetPosition.y = targetHeight;
+
+                    //change the plane the teleport curve touch as the height changes
+                    let hand = document.querySelector("#hand");
+                    // hand.setAttribute("teleport-controls", "landingNormal", `(0, ${targetHeight + 1}, 0)`);
 
                     // console.log(targetHeight)
 
