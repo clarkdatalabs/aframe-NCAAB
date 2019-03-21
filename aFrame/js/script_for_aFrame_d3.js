@@ -257,8 +257,8 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 .classed('heightPort', true)
                 .attr('id',(d) => `heightPort_${d}`)
                 .attr('position', (d) => `0 ${d} 0`)
-                .attr('radius-outer', '26')
-                .attr('radius-inner', '14.5')
+                .attr('radius-outer', '18')
+                .attr('radius-inner', '15')
                 .attr('rotation', '90 0 0')
                 .attr('side', 'double')
                 .attr('segments-theta', 100)
@@ -275,7 +275,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
 
                     //change the plane the teleport curve touch as the height changes
                     let hand = document.querySelector("#hand");
-                    // hand.setAttribute("teleport-controls", "landingNormal", `(0, ${targetHeight + 1}, 0)`);
+                    hand.setAttribute("teleport-controls", "collisionEntities", "y", targetHeight);
 
                     // console.log(targetHeight)
 
