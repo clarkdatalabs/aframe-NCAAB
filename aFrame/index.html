@@ -14,8 +14,8 @@
 
 
     <body>
-        <!-- <a-scene> -->
-        <a-scene cursor="rayOrigin: mouse">
+        <a-scene>
+        <!-- <a-scene cursor="rayOrigin: mouse"> -->
 
             <a-assets>
             </a-assets>
@@ -26,15 +26,11 @@
                 <a-entity id="head" camera wasd-controls="fly: true" look-controls></a-entity>
                 <a-entity id="hand" raycaster="showLine: true"
                             line="color: white; opacity: 0.25" laser-controls="hand:right"
-<<<<<<< HEAD
                             teleport-controls="cameraRig: #cameraRig;
                                                 teleportOrigin: #head;
                                                 button: trackpad;
                                                 curveShootingSpeed: 10;
                                                 collisionEntities: .telePortCollisionEntity"
-=======
-                            teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; button: trackpad; curveShootingSpeed: 10; "
->>>>>>> 3cd6681848709e3028aeb7c4d28fcbc46b5bfdb9
                             gearvr-controls></a-entity>
                             <!-- maxLength: 200; type: line; -->
             </a-entity>
