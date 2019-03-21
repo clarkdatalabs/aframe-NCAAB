@@ -275,7 +275,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
 
                     //change the plane the teleport curve touch as the height changes
                     let hand = document.querySelector("#hand");
-                    hand.setAttribute("teleport-controls", "landingNormal", `(0, ${targetHeight + 1}, 0)`);
+                    // hand.setAttribute("teleport-controls", "landingNormal", `(0, ${targetHeight + 1}, 0)`);
 
                     // console.log(targetHeight)
 
