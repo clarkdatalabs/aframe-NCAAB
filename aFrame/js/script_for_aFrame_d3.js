@@ -8,10 +8,11 @@
     //Create HUD
     const aHead = d3.select('#head');
     const hud = aHead.append('a-entity')
-                        //.attr('id','hud')
+                        .attr('id','hud')
                         .attr('geometry','primitive: plane; height: 0.2; width: 0.2')
                         .attr('position','-2 1 -1.5') //X,Y,Z
-                        .attr('material',"color: gray; opacity: 0.0");
+                        .attr('material',"color: gray; opacity: 1")
+                        //.attr('text','value: noooooo');
 
 
 // independent parameters
@@ -181,7 +182,10 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                         // console.log(d.points_game, " & ", teamUniqueName, " & ", teams[teamUniqueName], " & ", d.tournament_round)
                         let selectedCurve = document.querySelector(`#${teamUniqueName}Curve`);
                         selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
-
+                        
+                        //HUD Doesn't Work
+                        let HUD = document.querySelector('#hud');
+                        HUD.setAttribute('text', 'width: 100;' + 'value:' + teamUniqueName)
 
                         console.log(this)
                     })
