@@ -29,20 +29,21 @@
                             teleport-controls="cameraRig: #cameraRig;
                                                 teleportOrigin: #head;
                                                 button: trackpad;
-                                                curveShootingSpeed: 10;"
+                                                curveShootingSpeed: 30;
+                                                collisionEntities: #telePortCollisionEntity;"
                             gearvr-controls></a-entity>
 
-                            <!-- collisionEntities: #telePortCollisionEntity -->
+                            <!--  -->
                             <!-- maxLength: 200; type: line; -->
             </a-entity>
 
-            <!-- <a-entity id="telePortCollisionEntity"
-                        geometry="primitive: plane; height: 10; width: 10"
+            <a-plane id="telePortCollisionEntity"
                         position="0 -1 0"
+                        scale="500 500 1"
                         rotation="-90 0 0"
-                        > -->
-                        <!-- material="visible:false"
-            </a-entity>-->
+                        material="visible:false"
+                        >
+            </a-plane>
 
             <a-sky color="black"></a-sky>
 
