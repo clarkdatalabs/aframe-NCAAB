@@ -12,7 +12,7 @@
                         .attr('geometry','primitive: plane; height: 0.2; width: 0.2')
                         .attr('position','-2 1 -1.5') //X,Y,Z
                         .attr('material',"color: gray; opacity: 1")
-                        .attr('text','color: white; align: center; value: noooooo; width:1.5');
+                        .attr('text','color: white; align: center; value: tryStaticCollisionPlane; width:1.5');
 
 
 // independent parameters
@@ -184,7 +184,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                         selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
 
                         //HUD Doesn't Work
-                        
+
                         hud.setAttribute('text','value:' + teamUniqueName)
 
                         console.log(this)
@@ -254,6 +254,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
     // create the target to move to a different height
         const headRig = d3.select("#cameraRig");
         var heightAt = 0;
+        // console.log("hey");
         aEntity.selectAll(".heightPort")
                 .data(heights)
                 .enter()
@@ -277,11 +278,9 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                     let targetPosition = currentPosition;
                     targetPosition.y = targetHeight;
 
-                    //change the plane the teleport curve touch as the height changes
-                    let hand = document.querySelector("#hand");
-                    hand.setAttribute("teleport-controls", "collisionEntities", "y", targetHeight);
-
-                    // console.log(targetHeight)
+                    // // change the plane the teleport curve touch as the height changes
+                    // let collidePlane = document.querySelector("#telePortCollisionEntity");
+                    // collidePlane.setAttribute("position", `0 ${targetHeight} 0`)
 
                     headRig.attr('position', targetPosition)
                 })
