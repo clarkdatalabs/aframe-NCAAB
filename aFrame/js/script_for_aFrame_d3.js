@@ -280,7 +280,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
 
                     //change the plane the teleport curve touch as the height changes
                     let hand = document.querySelector("#hand"),
-                        collidePlane = document.querySelector(".telePortCollisionEntity");
+                        collidePlane = document.querySelector("#telePortCollisionEntity");
 
 
                     collidePlane.setAttribute("position", `0 ${targetHeight} 0`)

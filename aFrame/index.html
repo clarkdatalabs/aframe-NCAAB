@@ -30,16 +30,16 @@
                                                 teleportOrigin: #head;
                                                 button: trackpad;
                                                 curveShootingSpeed: 10;
-                                                collisionEntities: .telePortCollisionEntity"
+                                                collisionEntities: #telePortCollisionEntity"
                             gearvr-controls></a-entity>
                             <!-- maxLength: 200; type: line; -->
             </a-entity>
 
-            <a-entity class="telePortCollisionEntity"
-                        geometry="primitive: plane; height: 200; width: 200"
-                        position="0 0 0"
+            <a-entity id="telePortCollisionEntity"
+                        geometry="primitive: plane; height: 10; width: 10"
+                        position="0 -1 0"
                         rotation="-90 0 0"
-                        material="opacity: 0">
+                        material="visible:false">
             </a-entity>
 
             <a-sky color="black"></a-sky>
