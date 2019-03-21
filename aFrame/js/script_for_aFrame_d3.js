@@ -12,7 +12,7 @@
                         .attr('geometry','primitive: plane; height: 0.2; width: 0.2')
                         .attr('position','-2 1 -1.5') //X,Y,Z
                         .attr('material',"color: gray; opacity: 1")
-                        .attr('text','color: white; align: center; value: noooooo; width:1.5');
+                        .attr('text','color: white; align: center; value: tryStaticCollisionPlane; width:1.5');
 
 
 // independent parameters
