@@ -32,8 +32,9 @@
           heights = [-15, -10, -5, 0, 5, 10, 15]; // the actual heights of each round in the VR
 
     //colors assignment
-        const color_normalTeam = '#FFCC4F',
-              color_theTeam = '#4249FF',
+        const color_Michigan = '#76AAFF',
+              color_winner = '#FFEC04',
+              color_loser = '#FFE98A',
               color_hoveredTeam = 'white',
               color_circleScale = 'white',
               color_oppositeLine = 'red',
@@ -151,12 +152,20 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 .data(data)
                 .enter()
                 .append('a-sphere')
-                    // .classed('team', true)
+                    .attr('id', (d) => d.id)
                     .attr('class', (d) => {
                         let teamUniqueName = getName(d);
                         return `team ${teamUniqueName}Node`;
                     })
-                    .attr('color', (d)=> d.market == 'Michigan' ? color_theTeam : color_normalTeam) // here the color can be changed based on leage or something (maybe another scale is needed)
+                    .attr('color', (d)=> {
+                        if(d.market == 'Michigan'){
+                            return color_Michigan;
+                        } else if(d.id < 67){
+                            return color_winner;
+                        } else{
+                            return color_loser;
+                        }
+                    })// here the color can be changed based on leage or something (maybe another scale is needed)
                     .attr('scale', '0.15 0.15 0.15') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
                     .attr('position', (d) => {
                         let teamUniqueName = getName(d),
@@ -205,7 +214,16 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                         // set the color of all this team's nodes back
                             let teamNodes = document.querySelectorAll(`.${teamUniqueName}Node`);
                             teamNodes.forEach((node) => {
-                                let originColor = node.classList[1].split('_')[0] == 'Michigan' ? color_theTeam : color_normalTeam;
+                                let market = node.classList[1].split('_')[0],
+                                    thisId = +node.id,
+                                    originColor;
+                                if (market == 'Michigan'){
+                                    originColor = color_Michigan;
+                                } else if(thisId < 67){
+                                    originColor = color_winner;
+                                } else{
+                                    originColor = color_loser;
+                                }
                                 node.setAttribute('color', originColor);
                             });
 
