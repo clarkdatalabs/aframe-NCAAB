@@ -14,8 +14,8 @@
 
 
     <body>
-        <a-scene>
-        <!-- <a-scene cursor="rayOrigin: mouse"> -->
+        <!-- <a-scene> -->
+        <a-scene cursor="rayOrigin: mouse">
 
             <a-assets>
             </a-assets>
@@ -29,21 +29,19 @@
                             teleport-controls="cameraRig: #cameraRig;
                                                 teleportOrigin: #head;
                                                 button: trackpad;
-                                                curveShootingSpeed: 30;
-                                                collisionEntities: #telePortCollisionEntity;"
+                                                curveShootingSpeed: 30;"
                             gearvr-controls></a-entity>
 
-                            <!--  -->
-                            <!-- maxLength: 200; type: line; -->
+                            <!-- collisionEntities: #telePortCollisionEntity; -->
             </a-entity>
 
-            <a-plane id="telePortCollisionEntity"
+            <!-- <a-plane id="telePortCollisionEntity"
                         position="0 -1 0"
                         scale="500 500 1"
                         rotation="-90 0 0"
                         material="visible:false"
                         >
-            </a-plane>
+            </a-plane> -->
 
             <a-sky color="black"></a-sky>
 
