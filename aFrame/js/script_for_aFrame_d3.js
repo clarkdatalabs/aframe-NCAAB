@@ -7,13 +7,20 @@
 
     //Create HUD
     const aHead = d3.select('#head');
-    const hud = aHead.append('a-entity')
-                        //.attr('id','hud')
-                        .attr('geometry','primitive: plane; height: 1; width: 0.5')
-                        .attr('position','1.65 0 -1.5') //X,Y,Z
-                        .attr('rotation', '0 -15 0')
-                        .attr('material',"color: #B2CFE8; transparent: true; opacity: 0.5")
-                        .attr('text','color: white; align: center; value: select any; width:1.5');
+    const hud_hover = aHead.append('a-entity')
+                            //.attr('id','hud_hover')
+                            .attr('geometry','primitive: plane; height: 1; width: 0.5')
+                            .attr('position','1.65 0 -1.5') //X,Y,Z
+                            .attr('rotation', '0 -15 0')
+                            .attr('material',"color: #B2CFE8; transparent: true; opacity: 0.2")
+                            .attr('text','color: white; align: center; value: hover; width:1.5');
+    const hud_selected = aHead.append('a-entity')
+                            //.attr('id','hud_selected')
+                            .attr('geometry','primitive: plane; height: 1; width: 0.5')
+                            .attr('position','-1.65 0 -1.5') //X,Y,Z
+                            .attr('rotation', '0 15 0')
+                            .attr('material',"color: #B2CFE8; transparent: true; opacity: 0.6")
+                            .attr('text','color: white; align: center; value: selected; width:1.5');
 
 
 // independent parameters
@@ -25,8 +32,9 @@
           heights = [-15, -10, -5, 0, 5, 10, 15]; // the actual heights of each round in the VR
 
     //colors assignment
-        const color_normalTeam = 'orange',
-              color_theTeam = 'blue',
+        const color_normalTeam = '#FFCC4F',
+              color_theTeam = '#4249FF',
+              color_hoveredTeam = 'white',
               color_circleScale = 'white',
               color_oppositeLine = 'red',
               color_selfCurve = 'green';
@@ -85,11 +93,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
             var thisCurve;
         // FUNCTION create the curves among the team itself at different rounds
             const drawTeamCurve = (teamUniqueName) => {
-                // console.log('draw a selfCurve for ', teamUniqueName);
-
                 let curveId = `#${teamUniqueName}`;
-                // // delete existing draw_curve
-                //     d3.select('a-draw-curve').remove();
                 // if the team has been detected
                     if (curves.hasOwnProperty(teamUniqueName)){
                         // if the team has a curve, then draw it
@@ -106,13 +110,10 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 // if the team has not been detected, then let's detect
                     else {
                         let positions = teamsSelfPositions[teamUniqueName];  // {teamName:[points], ...}, this is generated when the node was generated
-                        // console.log("positions this time: ",positions)
                         // if the team has only one point, it will have no curve, so just record it
                             if (positions.length == 1) {
                                 // record
                                     curves[teamUniqueName] = 0;
-
-                                // console.log("Have put this team in record, but it does not make any progress in the tournament...");
                             }
                         // else, record it, construct the curve, and then draw it
                             else {
@@ -129,7 +130,6 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                                                         .classed('selfCurve', true)
                                                         .attr('id', teamUniqueName)
                                 // put each point as an a-curve-point into the a-curve
-                                // console.log(positions);
                                     positions.forEach((p) => {
                                         thisCurve.append('a-curve-point')
                                                     .attr('position', p)
@@ -141,9 +141,6 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                                             .attr('id', `${teamUniqueName}Curve`)
                                             .attr('curveref', () => curveId)
                                             .attr('material', `color: ${color_selfCurve}; opacity: 0.3`)
-
-
-                                // console.log("Have put this team in record, draw!");
                             }
                     }
             }
@@ -154,7 +151,11 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                 .data(data)
                 .enter()
                 .append('a-sphere')
-                    .classed('team', true)
+                    // .classed('team', true)
+                    .attr('class', (d) => {
+                        let teamUniqueName = getName(d);
+                        return `team ${teamUniqueName}Node`;
+                    })
                     .attr('color', (d)=> d.market == 'Michigan' ? color_theTeam : color_normalTeam) // here the color can be changed based on leage or something (maybe another scale is needed)
                     .attr('scale', '0.15 0.15 0.15') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
                     .attr('position', (d) => {
@@ -168,7 +169,6 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                             } else {
                                 teamsSelfPositions[teamUniqueName].push(thisPosition);
                             }
-
                         return thisPosition;
                     })
                     // .attr('event-set__mouseenter', function(d){ // a-frame way of on "mouseenter"
@@ -178,29 +178,48 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                     //     return 'material.opacity: 1';
                     // })
                     .on('mouseenter', function(d){
-                        this.setAttribute('opacity', '0.5');
+                        // change this node's style
+                            this.setAttribute('opacity', '0.5');
+
                         let teamUniqueName = getName(d);
-                        // console.log(d.points_game, " & ", teamUniqueName, " & ", teams[teamUniqueName], " & ", d.tournament_round)
-                        let selectedCurve = document.querySelector(`#${teamUniqueName}Curve`);
-                        selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
+                        // change the color of all this team's nodes
+                            let teamNodes = document.querySelectorAll(`.${teamUniqueName}Node`);
+                            teamNodes.forEach((node) => {
+                                node.setAttribute('color', color_hoveredTeam);
+                            });
 
+                        // change the style of this team's curve
+                            let selectedCurve = document.querySelector(`#${teamUniqueName}Curve`);
+                            selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
 
-                        hud.attr('text',`color: white; align: center; value: ${teamUniqueName}; width:1.5`)
+                        // show information of the team on the "hover" hud
+                        hud_hover.attr('text',`color: white; align: center; value: ${teamUniqueName}; width:1.5`)
 
-                        console.log(hud)
+                        // console.log(hud_hover)
                     })
                     .on('mouseleave', function(d){
-                        this.setAttribute('opacity', '1');
-                        let teamUniqueName = getName(d),
-                            selectedCurve = document.querySelector(`#${teamUniqueName}Curve`),
-                            currentCurveOpacity = selectedCurve.getAttribute('material').opacity;
-                        if(currentCurveOpacity == 0.8) {
-                            selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.3`);
-                        }
+                        // set this node's style back
+                            this.setAttribute('opacity', '1');
 
-                        hud.attr('text','color: white; align: center; value: select any; width:1.5')
+                        let teamUniqueName = getName(d);
+                        // set the color of all this team's nodes back
+                            let teamNodes = document.querySelectorAll(`.${teamUniqueName}Node`);
+                            teamNodes.forEach((node) => {
+                                let originColor = node.classList[1].split('_')[0] == 'Michigan' ? color_theTeam : color_normalTeam;
+                                node.setAttribute('color', originColor);
+                            });
 
-                        console.log(this)
+                        // set the style of this team's curve back as long as it's not selected
+                            let selectedCurve = document.querySelector(`#${teamUniqueName}Curve`),
+                                currentCurveOpacity = selectedCurve.getAttribute('material').opacity;
+                            if(currentCurveOpacity == 0.8) {
+                                selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.3`);
+                            }
+
+                        // show information of the team on the "hover" hud
+                        hud_hover.attr('text','color: white; align: center; value: hover; width:1.5')
+
+                        // console.log(this)
                     })
                     .on('click', function(d){
                         let teamUniqueName = getName(d),
