@@ -30,13 +30,18 @@
 
     //colors assignment
         const color_Michigan = '#76AAFF',
-              color_winner = '#FFEC04',
-              color_loser = '#FFE98A',
+              color_home = '#FFEC04',
+              color_away = '#FFFBBB',
               color_hoveredTeam = 'red',
               color_circleScale = 'white',
               color_oppositeLine = 'red',
               color_selfCurve = 'green',
               color_selfCurve_hud = 'white';
+
+
+    //scales assignment
+        const scale_sphere = 0.15,
+              scale_box = 0.25;
 
     const y_scale = d3.scaleOrdinal()
                       .domain(['First 4', 'First Round', 'Second Round', 'Sweet 16', 'Elite Eight', 'Semifinals', 'Final 2'])
@@ -216,7 +221,14 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
         aEntity.selectAll('.team')
                 .data(data)
                 .enter()
-                .append('a-sphere')
+                // .append('a-sphere')
+                .append((d) => {
+                                    let prim = d.id < 67 ? "a-sphere" : "a-box";
+                                    // switch(d.id){
+                                    //     case
+                                    // }
+                                    return document.createElement(prim);
+                                })
                     .attr('id', (d) => d.id)
                     .attr('class', (d) => {
                         let teamUniqueName = getName(d);
@@ -226,12 +238,15 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                         if(d.market == 'Michigan'){
                             return color_Michigan;
                         } else if(d.id < 67){
-                            return color_winner;
+                            return color_home;
                         } else{
-                            return color_loser;
+                            return color_away;
                         }
                     })// here the color can be changed based on leage or something (maybe another scale is needed)
-                    .attr('scale', '0.15 0.15 0.15') // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
+                    .attr('scale', (d) => {
+                                            scaleFactor = d.id < 67 ? scale_sphere : scale_box;
+                                            return `${scaleFactor} ${scaleFactor} ${scaleFactor}`;
+                                        }) // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
                     .attr('position', (d) => {
                         let teamUniqueName = getName(d),
                             thisPosition = teamPlace(teams[teamUniqueName], d.points_game, d.tournament_round),
@@ -282,9 +297,9 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                                 if (market == 'Michigan'){
                                     originColor = color_Michigan;
                                 } else if(thisId < 67){
-                                    originColor = color_winner;
+                                    originColor = color_home;
                                 } else{
-                                    originColor = color_loser;
+                                    originColor = color_away;
                                 }
                                 node.setAttribute('color', originColor);
                             });
