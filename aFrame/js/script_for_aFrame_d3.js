@@ -41,7 +41,12 @@
 
     //scales assignment
         const scale_sphere = 0.15,
-              scale_box = 0.25;
+              scale_box = 0.25,
+              seed_factor_max = 1,
+              seed_factor_min = 0.1;
+        const seed_impact_factor = d3.scaleLinear()
+                                        .domain([1,16])
+                                        .range([seed_factor_max,seed_factor_min]);
 
     const y_scale = d3.scaleOrdinal()
                       .domain(['First 4', 'First Round', 'Second Round', 'Sweet 16', 'Elite Eight', 'Semifinals', 'Final 2'])
@@ -245,6 +250,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                     })// here the color can be changed based on leage or something (maybe another scale is needed)
                     .attr('scale', (d) => {
                                             scaleFactor = d.id < 67 ? scale_sphere : scale_box;
+                                            scaleFactor *= seed_impact_factor(d.seed);
                                             return `${scaleFactor} ${scaleFactor} ${scaleFactor}`;
                                         }) // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
                     .attr('position', (d) => {
