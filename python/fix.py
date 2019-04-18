@@ -67,7 +67,6 @@ query = """
     AND teams_game.tournament_type IN ('South Regional', 'West Regional', 'National Championship','East Regional','First Four','Midwest Regional','Final Four');
 """
 
-seedquery
 
 df = ncaa_basketball.query_to_pandas_safe(query, max_gb_scanned=1)
 
@@ -82,7 +81,7 @@ print(WinPts_inds)
 '''
 
 
-df.to_csv(r'generated_data/'+'2017_season_detailed_cleaned'+'.csv')
+df.to_csv(r'generated_data/'+'2017_season'+'.csv')
 #df.to_csv('2013_season'+'.csv')
 
 
