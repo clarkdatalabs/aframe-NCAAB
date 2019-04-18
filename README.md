@@ -3,6 +3,7 @@
 
 # Resources 
 [NCAAB Data Set](https://www.kaggle.com/ncaa/ncaa-basketball)
+[Basketball Analytics](https://www.nbastuffer.com/team-evaluation-metrics/)
 
 # Libraries
 [Pandas](https://pandas.pydata.org/)
@@ -10,8 +11,6 @@
 [Google BigQuery](https://cloud.google.com/bigquery/docs/reference/libraries)
 
 [A-Frame](https://aframe.io/)
-
-
 
 
 ## Project Layout
