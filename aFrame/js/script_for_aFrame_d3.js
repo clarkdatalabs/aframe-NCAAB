@@ -30,8 +30,8 @@
 
     //colors assignment
         const color_Michigan = '#76AAFF',
-              color_home = '#FFEC04',
-              color_away = '#FFFBBB',
+              color_winner = '#FFEC04',
+              color_loser = '#FFFBBB',
               color_hoveredTeam = 'red',
               color_circleScale = 'white',
               color_oppositeLine = 'red',
@@ -39,11 +39,17 @@
               color_selfCurve_hud = 'white';
 
 
+    //primitive sideNum
+        const sideNum_strongBoth = 40,
+              sideNum_strongOffence = 3,
+              sideNum_strongDeffence = 6,
+              sideNum_weakBoth = 4;
+
+
     //scales assignment
-        const scale_sphere = 0.15,
-              scale_box = 0.25,
-              seed_factor_max = 1,
-              seed_factor_min = 0.1;
+        const scale_normal = 0.15,
+              seed_factor_max = 1.5,
+              seed_factor_min = 0.5;
         const seed_impact_factor = d3.scaleLinear()
                                         .domain([1,16])
                                         .range([seed_factor_max,seed_factor_min]);
@@ -104,7 +110,11 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
         gameTeamIdPositions = {}, // 3.0 {id: point, id: point, ...} get the pairs of id (in csv) & point position, This is for lines between opposite teams
         teamsSelfPositions = {}, // 2.2 {teamUniqueName:[points], ...} This is for curves among themselves through rounds
         teamsSelfPositions_hud = {}, // 2.3 {teamUniqueName:[points_hud], ...} This is for curves among themselves through rounds on the HUD
-        teamsShownOnHud = []; // 4.0 [teamUniqueName, ...] Identify the curves of which teams are shown and in comparison
+        teamsShownOnHud = [], // 4.0 [teamUniqueName, ...] Identify the curves of which teams are shown and in comparison
+        teamGameColor = {}; // {id: color, id: color, ...} Record the original color of each gameNode for mouseLeave
+
+    var offen_effs = [],
+        defen_effs = [];
 
     // assigne teamIndex to each team named teamUniqueName
         data.forEach((d)=>{
@@ -112,6 +122,10 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
 
             let teamName = getName(d);
             if(! teams.hasOwnProperty(teamName)) teams[teamName] = teamIndex++;
+
+            //for offensive/defensive efficiency categorization
+                offen_effs.push(+d.offensive_efficiency);
+                defen_effs.push(+d.defensive_efficiency);
         })
 
     // parameters that need csv
@@ -129,12 +143,16 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                                   .attr('text', `color: white; value: ${maxPoint}; width: 0.5;`);
 
     const r_scale = d3.scaleLinear()
-                          .domain([minPoint, maxPoint])
-                          .range([maxR, 0]);
+                      .domain([minPoint, maxPoint])
+                      .range([maxR, 0]);
 
     const x_scale_hud = d3.scaleLinear()
-                        .domain([minPoint, maxPoint])
-                        .range([minX, maxX]);
+                            .domain([minPoint, maxPoint])
+                            .range([minX, maxX]);
+
+    const offen_effs_midPoint = (Math.max(...offen_effs) + Math.min(...offen_effs)) / 2,
+          defen_effs_midPoint = (Math.max(...defen_effs) + Math.min(...defen_effs)) / 2;
+
 
     // FUNCTION to position a team at a round
     const teamPlace = (teamIndex, score, round) => {
@@ -222,34 +240,47 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
             }
 
 
-    // create the spheres as teams
+    // create the cylinders as teams
         aEntity.selectAll('.team')
                 .data(data)
                 .enter()
-                // .append('a-sphere')
-                .append((d) => {
-                                    let prim = d.id < 67 ? "a-sphere" : "a-box";
-                                    // switch(d.id){
-                                    //     case
-                                    // }
-                                    return document.createElement(prim);
-                                })
+                .append('a-cylinder')
                     .attr('id', (d) => d.id)
                     .attr('class', (d) => {
                         let teamUniqueName = getName(d);
                         return `team ${teamUniqueName}Node`;
                     })
+                    .attr('segments-radial', (d) => {
+                            let this_off_eff = d.offensive_efficiency,
+                                this_def_eff = d.defensive_efficiency;
+
+                            let sideNum;
+
+                            let offIsStrong = this_off_eff > offen_effs_midPoint ? 1 : 0,
+                                defIsStrong = this_def_eff > defen_effs_midPoint ? 1 : 0;
+
+                            if(offIsStrong){
+                                sideNum = defIsStrong ? sideNum_strongBoth : sideNum_strongOffence;
+                            } else{
+                                sideNum = defIsStrong ? sideNum_strongDeffence : sideNum_weakBoth;
+                            }
+
+                            return sideNum;
+                        })
                     .attr('color', (d)=> {
+                        let theColor;
                         if(d.market == 'Michigan'){
-                            return color_Michigan;
-                        } else if(d.id < 67){
-                            return color_home;
+                            theColor = color_Michigan;
+                        } else if(+d.points_game >= +d.o_points_game){
+                            theColor = color_winner;
                         } else{
-                            return color_away;
+                            theColor = color_loser;
                         }
+                        teamGameColor[d.id] = theColor;
+                        return theColor;
                     })// here the color can be changed based on leage or something (maybe another scale is needed)
                     .attr('scale', (d) => {
-                                            scaleFactor = d.id < 67 ? scale_sphere : scale_box;
+                                            scaleFactor = scale_normal;
                                             scaleFactor *= seed_impact_factor(d.seed);
                                             return `${scaleFactor} ${scaleFactor} ${scaleFactor}`;
                                         }) // the scale can be changed based on Seed like `${0.1 * d.Seed} ${0.1 * d.Seed} ${0.1 * d.Seed}`
@@ -285,7 +316,7 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                             selectedCurve.setAttribute('material', `color: ${color_selfCurve}; opacity: 0.8`);
 
                         // show information of the team on the "hover" hud
-                        hud_hover.attr('text',`color: white; align: center; value: ${teamUniqueName}; width:${hud_width}`)
+                        hud_hover.attr('text',`color: white; align: center; value: ${teamUniqueName} with ${d.points_game} VS ${d.o_points_game}; width:${hud_width}`)
 
                         // console.log(hud_hover)
                     })
@@ -298,15 +329,17 @@ d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
                             let teamNodes = document.querySelectorAll(`.${teamUniqueName}Node`);
                             teamNodes.forEach((node) => {
                                 let market = node.classList[1].split('_')[0],
-                                    thisId = +node.id,
-                                    originColor;
-                                if (market == 'Michigan'){
-                                    originColor = color_Michigan;
-                                } else if(thisId < 67){
-                                    originColor = color_home;
-                                } else{
-                                    originColor = color_away;
-                                }
+                                    thisId = +node.id;
+                                    originColor = teamGameColor[thisId];
+                                // console.log(originColor)
+                                // console.log(node)
+                                // if (market == 'Michigan'){
+                                //     originColor = color_Michigan;
+                                // } else if(+d.points_game >= +d.o_points_game){
+                                //     originColor = color_winner;
+                                // } else{
+                                //     originColor = color_loser;
+                                // }
                                 node.setAttribute('color', originColor);
                             });
 
