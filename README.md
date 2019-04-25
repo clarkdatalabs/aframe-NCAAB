@@ -71,9 +71,20 @@ Run the following in the javascript folder to start your own server
 ```
 python -m SimpleHTTPServer
 ```
+## Tutorial
+
+### Kaggle
+
+### BigQuery
+
+### Pandas
+
+### AFrame
+
+#### d3 data manipulation
 
 
-
+## Extras
 ### Created Metrics
 [Win Chance Percentage](https://public.tableau.com/views/NCAAB-aFrame/WinPCTChange?:embed=y&:display_count=yes&publish=yes)
 
