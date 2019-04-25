@@ -30,7 +30,7 @@ C) Progression into the tournament.
     ├── LICENSE              
     └── README.md
 
-## Install Required Dependencies
+## Build and run
 
 ### Python 
 Install and Enter your Virtual Environment
@@ -50,12 +50,16 @@ pip install -r reqs.txt
 Install helper function
 ```
 pip install -e git+https://github.com/SohierDane/BigQuery_Helper#egg=bq_helper
-
 ```
 
 Enable Google authenticaiton
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=./secrets/Data\ Visualization-0a64d281dd18.json
+```
+
+Run python script to generate CSV
+```
+python bball_query.py
 ```
 
 ### Javascript 
@@ -64,7 +68,6 @@ Run the following in the javascript folder to start your own server
 python -m SimpleHTTPServer
 ```
 
-----
 
 
 ### Created Metrics
