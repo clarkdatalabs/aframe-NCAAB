@@ -3,6 +3,10 @@
 ## Demos
 [Interactive 3D Chart](https://hopetambala.github.io/aframe-NCAAB/aFrame/)
 
+<p align="middle">
+    <img src="https://github.com/hopetambala/aframe-NCAAB/blob/master/assets/Aframe.png">
+</p>
+
 ## Description
 The goal of this project was to use Google's BigQuery Python client library to query data in [Kaggle's NCAA Basketball data](https://www.kaggle.com/ncaa/ncaa-basketball) which dates from as far back as 1894. We chose a subset of data from the 2017-2018 NCAA Basketball Tournament bracket and created an A-Frame Visualization. 
 
