@@ -77,8 +77,8 @@
 // Create hud
     var hud_hover = aHead.append('a-entity')
                             //.attr('id','hud_hover')
-                            .attr('geometry',`primitive: plane; height: ${hud_height}; width: ${hud_width}`)
-                            .attr('position',`${hud_position_x + hud_width/2} 0 ${hud_position_z}`) //X,Y,Z
+                            .attr('geometry',`primitive: plane; height: ${hud_height * 3.8 / 5}; width: ${hud_width}`)
+                            .attr('position',`${hud_position_x + hud_width/2} ${ hud_height * 0.6 /5} ${hud_position_z}`) //X,Y,Z
                             .attr('rotation', `0 -${hud_rotation} 0`)
                             .attr('material',`color: ${hud_color}; transparent: true; opacity: ${hud_opacity_hover}`)
                             .attr('text',`color: white; align: center; value: hover; width: ${hud_width}`);
@@ -100,6 +100,36 @@
                                                     .attr('material', 'color: white')
                                                     .attr('position', `${maxX} ${hud_height / 2 * 0.05} 0`)
 
+// Create legend
+    var legendSection = aHead.append('a-entity')
+                              .attr('geometry',`primitive: plane; height: ${hud_height / 5}; width: ${hud_width}`)
+                              .attr('position',`${hud_position_x + hud_width/2} ${ - hud_height * 2 /5} ${hud_position_z}`) //X,Y,Z
+                              .attr('rotation', `0 -${hud_rotation} 0`)
+                              .attr('material',`color: ${hud_color}; transparent: true; opacity: ${hud_opacity_hover}`);
+        var sideNums = [
+                            [0, "Both Offensive & Deffensive", sideNum_strongBoth],
+                            [1, "More Offensive", sideNum_strongOffence],
+                            [2, "More Deffensive", sideNum_strongDeffence],
+                            [3, "Neither Offensive nor Deffensive", sideNum_weakBoth]
+                        ];
+        sideNums.forEach((info) => {
+            let index = info[0],
+                text = info[1],
+                num = info[2];
+            let thisLegend = legendSection.append('a-entity')
+                                            .attr('id', `Legend for ${text}`)
+                                            .attr('position', `${hud_width * ( - 3/8 + index * 1/4)} 0 0`);
+                let thisPrimitive = thisLegend.append('a-cylinder')
+                                                .attr('segments-radial', num)
+                                                .attr('scale', '0.03 0.03 0.03')
+                                                .attr('rotation', '30 15 0')
+                                                .attr('position', `0 ${hud_height * 0.1 / 5} 0`);
+                let thisText = thisLegend.append('a-entity')
+                                            .attr('text',  `color: white; value: ${text}; width: 0.2; wrap-count: 13`)
+                                            .attr('scale', '0.6 0.6 0.6')
+                                            .attr('position', `${hud_width * 0.05 / 5} ${-hud_height * 0.25 / 5} 0`)
+
+        })
 
 
 
