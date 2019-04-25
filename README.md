@@ -78,6 +78,7 @@ python -m SimpleHTTPServer
 ### BigQuery
 
 ### Pandas
+#### NBA Analytics and Equations
 
 ### AFrame
 
