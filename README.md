@@ -37,31 +37,34 @@ C) Progression into the tournament.
 ## Build and run
 
 ### Python 
-Install and Enter your Virtual Environment
+Install virtual environment library
 ```
 cd python/
 pip install virtualenv #if you don't have virtualenv installed 
+```
 
+Create and activate virtualenv
+```
 virtualenv <Name_of_Virtual_Environment>
 source <Name_of_Virtual_Environment>/bin/activate
 ```
 
-Install project requirements
+Install project requirements usings the reqs.text
 ```
 pip install -r reqs.txt
 ```
 
-Install helper function
+Install BigQuery helper function
 ```
 pip install -e git+https://github.com/SohierDane/BigQuery_Helper#egg=bq_helper
 ```
 
-Enable Google authenticaiton
+Enable Google authentication by exporting the required .json keys via terminal
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=./secrets/Data\ Visualization-0a64d281dd18.json
 ```
 
-Run python script to generate CSV
+Run python script to generate CSV via terminal
 ```
 python bball_query.py
 ```
@@ -71,7 +74,7 @@ Run the following in the javascript folder to start your own server
 ```
 python -m SimpleHTTPServer
 ```
-## Tutorial
+## Tutorial & Development
 
 ### Kaggle
 
@@ -82,7 +85,7 @@ python -m SimpleHTTPServer
 
 ### AFrame
 
-#### d3 data manipulation
+#### d3 Data Manipulation
 
 
 ## Extras
