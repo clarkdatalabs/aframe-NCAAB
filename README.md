@@ -1,11 +1,22 @@
 # A-Frame and NCAA Men's Basketball
 
+## Demos
+[Interactive 3D Chart](https://hopetambala.github.io/aframe-NCAAB/aFrame/)
 
-# Resources 
+## Description
+The goal of this project was to use Google's BigQuery Python client library to query data in [Kaggle's NCAA Basketball data](https://www.kaggle.com/ncaa/ncaa-basketball) which dates from as far back as 1894. We chose a subset of data from the 2017-2018 NCAA Basketball Tournament bracket and created an A-Frame Visualization. 
+
+The data was queried into a Pandas to allow for easier data manipulation. CSVs of the data were generated and placed into the Aframe folder. Using d3, that data was loaded into Aframe to create a 3D "Bracket-like" Scatter Plot that explores the relationships between the basketball teams
+A) Seed in the Tournament
+B) Playing Style
+C) Progression into the tournament.
+
+## Resources 
 [NCAAB Data Set](https://www.kaggle.com/ncaa/ncaa-basketball)
+
 [Basketball Analytics](https://www.nbastuffer.com/team-evaluation-metrics/)
 
-# Libraries
+## Libraries
 [Pandas](https://pandas.pydata.org/)
 
 [Google BigQuery](https://cloud.google.com/bigquery/docs/reference/libraries)
@@ -15,7 +26,7 @@
 
 ## Project Layout
     ├── python                    # Folder for data generation script and data in csvs
-    ├── javascript                # Folder for dexJS 
+    ├── javascript                # Folder for Aframe 
     ├── LICENSE              
     └── README.md
 
@@ -52,10 +63,6 @@ Run the following in the javascript folder to start your own server
 ```
 python -m SimpleHTTPServer
 ```
-
-### Browser
-
-[In-Browser](https://hopetambala.github.io/aframe-NCAAB/aFrame/)
 
 ----
 
