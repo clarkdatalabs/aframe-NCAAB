@@ -1,4 +1,4 @@
-# A-Frame and NCAA Men's Basketball
+# A-Frame, Python, and NCAA Men's Basketball Data
 
 ## Demos
 [Interactive 3D Chart](https://hopetambala.github.io/aframe-NCAAB/aFrame/)
