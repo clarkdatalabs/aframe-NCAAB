@@ -80,8 +80,7 @@ print(WinPts_inds)
 '''
 
 
-df.to_csv(r'generated_data/'+'2012_season_detailed'+'.csv')
-#df.to_csv('2013_season'+'.csv')
+df.to_csv(r'generated_data/'+'2017_season_detailed'+'.csv')
 
 
 
