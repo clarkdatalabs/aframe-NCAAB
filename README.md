@@ -137,8 +137,147 @@ Defensive Efficiency Fomula=100*(Points Allowed/Possessions)
 Note: In a game, the  “defensive efficiency” of a team equals to the “offensive efficiency” of the opponent team as well
 
 ### AFrame
+A-Frame is basically a framework based on THREE.js for VR/AR experience to be built into DOM system. It is quite "user-friendly" for people who know HTML to pick up, since it looks like a bunch of HTML tags. Below is a simple structure for using A-Frame, which is wrapped in <body>. But you should link the A-Frame version in <head>
 
+```
+<head>
+    <title>NCAA VR DataVis</title>
+    <script src="//aframe.io/releases/0.8.2/aframe.min.js"></script>
+</head>
+<body>
+    <a-scene cursor="rayOrigin: mouse">
+        <!--primitives-->
+        <a-cylinder></a-cylinder>
+    
+        <!--camera-->
+        <a-entity id="head" camera wasd-controls="fly: true" look-controls></a-entity> </a-entity>
+        
+        <!--background-->
+        <a-sky color="#170F21"></a-sky>
+    </a-scene>
+</body>
+```
+
+#### Primitives
+From the structure above, there's an <a-cylinder></a-cylinder>, it is an A-Frame pre-defined cylinder, and you can find more at [HTML & Primitives](https://aframe.io/docs/0.9.0/introduction/html-and-primitives.html).
+
+To modify the primitive, you can simply play with the attributes, like:
+```
+<a-cylinder scale="0.5 0.5 0.5" position="1 2 1" color="blue" segments-radial="20"></a-cylinder>
+```
+The attributes don't need to be sequential. Different primitive may have different unique attributes, like "segments-radial" is special for [a-cylinder](https://aframe.io/docs/0.9.0/primitives/a-cylinder.html). Feel free to just google the documents on any specific attributes you need.
+
+Also, you can fork [Neil's CodePen](https://codepen.io/neilzhu/pen/axYgqm) and play around it to get some more sense.
+
+#### a-entity
+[A-entity](https://aframe.io/docs/0.9.0/core/entity.html) is a generic object in A-Frame that has the potential to be a lot of pre-defined A-Frame elements, the a-cylinder can be presented as a-entity as well:
+```
+<a-entity geometry="primitive: cylinder; segments-radial: 20" material="color: blue" position="1 2 1" scale="0.5 0.5 0.5"></a-entity>
+```
+Also, the "#head" in the example structure above is one example:
+```
+<a-entity id="head" camera wasd-controls="fly: true" look-controls></a-entity></a-entity>
+```
+
+#### VR control
+Essentially, on top of what we already have, VR control just needs controllers defined. So here's how the camera part can be modified for this task:
+```
+<a-entity id="cameraRig">
+    <a-entity id="head" camera wasd-controls="fly: true" look-controls></a-entity>
+    <a-entity id="leftHand" raycaster="showLine: true"
+                line="color: white; opacity: 0.25" laser-controls="hand:left"
+                teleport-controls="cameraRig: #cameraRig;
+                                    teleportOrigin: #head;
+                                    button: trackpad;
+                                    curveShootingSpeed: 30;"
+                laser-controls></a-entity>
+    <a-entity id="rightHand" raycaster="showLine: true"
+                line="color: white; opacity: 0.25" laser-controls="hand:right"
+                teleport-controls="cameraRig: #cameraRig;
+                                    teleportOrigin: #head;
+                                    button: trackpad;
+                                    curveShootingSpeed: 30;"
+                laser-controls></a-entity>
+</a-entity>
+```
+
+Teleport-controls as an attribute, comes from a component that needs to be linked in <head> like:
+
+```
+<head>
+    ...
+    <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
+    ...
+</head>
+```
+
+#### Component
+A-Frame has a lot of open-sourse components out there, they are basically libraries of A-Frame. You can easily find them online. For this project, the components are imported like:
+```
+<head>
+    <title>NCAA VR DataVis</title>
+    <script src="//aframe.io/releases/0.8.2/aframe.min.js"></script>
+    
+    <script src="https://unpkg.com/aframe-event-set-component@^4.0.0/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
+    <script src="https://rawgit.com/protyze/aframe-curve-component/master/dist/aframe-curve-component.min.js"></script>
+    <script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.js"></script>
+    
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+```
 #### d3 Data Manipulation
+Since we have the A-Frame basically in the form of DOM, d3 can be used to easily manipulate the elements based on a large amount of data and make them interactable.
+
+Here is one example of doing so:
+```
+const aScene = d3.select('a-scene');
+
+const aEntity = aScene.append('a-entity')
+                        .attr('id', 'whole')
+                        .attr('position', '0 0 -15');
+
+...
+
+d3.csv('2017_season_detailed_cleaned.csv').then(function(data){
+
+    ...
+    
+    aEntity.selectAll('.team')
+                    .data(data)
+                    .enter()
+                    .append('a-cylinder')
+                        .attr('id', (d) => d.id)
+                        .attr('class', 'team')
+                        .attr('segments-radial', (d) => {
+                                if (conditionA){
+                                    return 3;
+                                } else{
+                                    return 4;
+                                }
+                            })
+                        .attr('scale', (d) => {
+                                scaleFactor = scale_normal;
+                                scaleFactor *= seed_impact_factor(d.seed);
+                                return `${scaleFactor} ${scaleFactor} ${scaleFactor}`;
+                            })
+                        ...
+                        .on('mouseenter', (d) => {
+                                this.setAttribute('opacity', '0.5');
+                            })
+                        .on('mouseleave', (d) => {
+                                this.setAttribute('opacity', '0.5');
+                            })
+                        ...
+    
+    ...
+    
+}
+
+...
+```
+
+Happy coding!
 
 
 ## Extras
