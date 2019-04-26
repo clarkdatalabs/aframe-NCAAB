@@ -4,7 +4,7 @@
 [Interactive 3D Chart](https://hopetambala.github.io/aframe-NCAAB/aFrame/)
 
 <p align="middle">
-    <img src="https://github.com/hopetambala/aframe-NCAAB/blob/master/assets/Aframe.png">
+    <img src="assets/Aframe.png">
 </p>
 
 ## Description
@@ -100,7 +100,7 @@ df.to_csv(r'generated_data/'+'2017_season_detailed'+'.csv')
 #### NBA Analytics and Equations
 There was a decent amount of manual manipulation that was required to get the CSV in the correct format. 
 <p align="middle">
-    <img src="https://github.com/hopetambala/aframe-NCAAB/blob/master/assets/excel.png">
+    <img src="assets/excel.png">
 </p>
 
 The CSV generated had data on basketball matches versus teams. This made it harder to create a scatterplot regarding the stats of individual teams. We figured out that if we just copy and pasted the "Away" teams (and their stats) for each match and appended them to the end of the excel sheet, we would be able to make the scatterplot based on teams.
