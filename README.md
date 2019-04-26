@@ -4,7 +4,7 @@
 [Interactive 3D Chart](https://hopetambala.github.io/aframe-NCAAB/aFrame/)
 
 <p align="middle">
-    <img src="images/Aframe.png">
+    <img src="images/thumbnail.png">
 </p>
 
 ## Description
