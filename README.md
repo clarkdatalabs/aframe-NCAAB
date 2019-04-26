@@ -30,8 +30,15 @@ C) Progression into the tournament.
 [D3.js](https://d3js.org/)
 
 ## Project Layout
-    ├── python                    # Folder for data generation script and data in csvs
-    ├── javascript                # Folder for Aframe 
+    ├── python                                   # Folder for data generation script and data in csvs
+    ├── aFrame                                   # Folder for Aframe
+        ├── 2017_season_detailed_cleaned.csv        # the generated data from python that will be used by d3
+        ├── 2017_season_detailed_cleaned.xlsx       # to make sense of the csv by the programmer
+        ├── index.html                              # the website is based here
+        ├── js                                      # Folder for js files
+            ├── script_for_aFrame_d3.js                 # Use d3 to build and manipulate a-frame
+            ├── script_for_aFrame.js                    # the original js file for manipulate a-frame without d3
+    ├── images                                   # Folder for images used for README.md
     ├── LICENSE              
     └── README.md
 
