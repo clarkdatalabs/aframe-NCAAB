@@ -137,7 +137,7 @@ Defensive Efficiency Fomula=100*(Points Allowed/Possessions)
 Note: In a game, the  “defensive efficiency” of a team equals to the “offensive efficiency” of the opponent team as well
 
 ### AFrame
-A-Frame is basically a framework based on THREE.js for VR/AR experience to be built into DOM system. It is quite "user-friendly" for people who know HTML to pick up, since it looks like a bunch of HTML tags. Below is a simple structure for using A-Frame, which is wrapped in <body>. But you should link the A-Frame version in <head>
+A-Frame is basically a framework based on THREE.js for VR/AR experience to be built into DOM system. It is quite "user-friendly" for people who know HTML to pick up, since it looks like a bunch of HTML tags. Below is a simple structure for using A-Frame, which is wrapped in "body". But you should link the A-Frame version in "head":
 
 ```
 <head>
@@ -159,7 +159,7 @@ A-Frame is basically a framework based on THREE.js for VR/AR experience to be bu
 ```
 
 #### Primitives
-From the structure above, there's an <a-cylinder></a-cylinder>, it is an A-Frame pre-defined cylinder, and you can find more at [HTML & Primitives](https://aframe.io/docs/0.9.0/introduction/html-and-primitives.html).
+From the structure above, there's an a-cylinder, it is an A-Frame pre-defined cylinder, and you can find more at [HTML & Primitives](https://aframe.io/docs/0.9.0/introduction/html-and-primitives.html).
 
 To modify the primitive, you can simply play with the attributes, like:
 ```
@@ -169,7 +169,7 @@ The attributes don't need to be sequential. Different primitive may have differe
 
 Also, you can fork [Neil's CodePen](https://codepen.io/neilzhu/pen/axYgqm) and play around it to get some more sense.
 
-#### a-entity
+#### A-entity
 [A-entity](https://aframe.io/docs/0.9.0/core/entity.html) is a generic object in A-Frame that has the potential to be a lot of pre-defined A-Frame elements, the a-cylinder can be presented as a-entity as well:
 ```
 <a-entity geometry="primitive: cylinder; segments-radial: 20" material="color: blue" position="1 2 1" scale="0.5 0.5 0.5"></a-entity>
@@ -226,7 +226,7 @@ A-Frame has a lot of open-sourse components out there, they are basically librar
     <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
 ```
-#### d3 Data Manipulation
+#### D3 Data Manipulation
 Since we have the A-Frame basically in the form of DOM, d3 can be used to easily manipulate the elements based on a large amount of data and make them interactable.
 
 Here is one example of doing so:
