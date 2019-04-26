@@ -4,11 +4,11 @@
 [Interactive 3D Chart](https://hopetambala.github.io/aframe-NCAAB/aFrame/)
 
 <p align="middle">
-    <img src="assets/Aframe.png">
+    <img src="images/Aframe.png">
 </p>
 
 ## Description
-The goal of this project was to use Google's BigQuery Python client library to query data in [Kaggle's NCAA Basketball data](https://www.kaggle.com/ncaa/ncaa-basketball) which dates from as far back as 1894. We chose a subset of data from the 2017-2018 NCAA Basketball Tournament bracket and created an A-Frame Visualization. 
+The goal of this project was to use Google's BigQuery Python client library to query data in [Kaggle's NCAA Basketball data](https://www.kaggle.com/ncaa/ncaa-basketball) which dates from as far back as 1894. We chose a subset of data from the 2017-2018 NCAA Basketball Tournament bracket and created an A-Frame Visualization using D3.js. 
 
 The data was queried into a Pandas to allow for easier data manipulation. CSVs of the data were generated and placed into the Aframe folder. Using d3, that data was loaded into Aframe to create a 3D "Bracket-like" Scatter Plot that explores the relationships between the basketball teams
 A) Seed in the Tournament
@@ -27,6 +27,7 @@ C) Progression into the tournament.
 
 [A-Frame](https://aframe.io/)
 
+[D3.js](https://d3js.org/)
 
 ## Project Layout
     ├── python                    # Folder for data generation script and data in csvs
@@ -100,7 +101,7 @@ df.to_csv(r'generated_data/'+'2017_season_detailed'+'.csv')
 #### NBA Analytics and Equations
 There was a decent amount of manual manipulation that was required to get the CSV in the correct format. 
 <p align="middle">
-    <img src="assets/excel.png">
+    <img src="images/excel.png">
 </p>
 
 The CSV generated had data on basketball matches versus teams. This made it harder to create a scatterplot regarding the stats of individual teams. We figured out that if we just copy and pasted the "Away" teams (and their stats) for each match and appended them to the end of the excel sheet, we would be able to make the scatterplot based on teams.
